@@ -1,0 +1,9 @@
+.cache
+.kdev4
+.pytest_cache
+python-db-pool.kdev4
+assets
+dist
+.egg-info
+__pycache__
+report.html
