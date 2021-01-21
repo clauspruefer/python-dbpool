@@ -9,6 +9,9 @@ __pycache__
 report.html
 Module.symvers
 modules.order
+build
+dist
+python_dbpool.egg-info
 *.o
 *.ko
 *.mod
