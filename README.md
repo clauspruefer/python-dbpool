@@ -1,1 +1,1 @@
-# python-dbpool
+# Python PgDatabase-Pool Module
