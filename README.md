@@ -30,13 +30,21 @@ From a configured **Pool** (Postgres Database Destination, Max Connection Count)
 
 ## 3. Thread Safety / Global Interpreter Lock
 
+Currently Thread Safety is guaranteed by `lock = threading.Lock()` which implies a Kernel Mutex syscall().
+
+This concept works, but the GIL (Python Global Interpreter Lock) thwarts our plans 😞.
+
+This means in detail: our concept works, but it is indeed a performance / scaling killer.
+
 ## 4. Documentation / Examples
+
+See documentation [./doc](./doc) for detailed explanation / illustrative examples.
 
 ## 5. Future
 
 DB-Pooling also should be usable in FalconAS Python Application Server (https://github.com/WEBcodeX1/http-1.2/).
 
-The model here: 1 Process == 1 Python Interpreter (without threading). 
+The model here: 1 Process == 1 Python Interpreter (threading-less), GIL Problem solved :grin:.
 
 >[!NOTE]
-> Logic has to be adapted.
+>  Also a Pool should be configurable to use multiple (read-loadbalanced) PostgreSQL endpoints.
