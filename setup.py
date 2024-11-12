@@ -1,8 +1,6 @@
-# -*- coding:utf-8 -*-
 from setuptools import setup
 
 setup(
-
     name = 'python-dbpool',
     version = '0.1.0a0',
     author = 'Claus Prüfer',
@@ -11,7 +9,7 @@ setup(
     description = 'A tiny static postgresql database pool for threaded wsgi webserver (apache2).',
     license = 'GPLv3',
     url = 'http://dbpool.python.webcodex.de',
-    long_description = open('./README.rst').read(),
+    long_description = open('./README.md').read(),
 
     classifiers = [
         'Development Status :: 3 - Alpha',
@@ -23,16 +21,11 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    project_urls = {
-        'Documentation': 'http://dbpool.python.webcodex.de',
-        'Source': 'http://github.com/cpruefer/python-dbpool',
-    },
-
     packages = [
-        'dbpool'
+        'pgdbpool'
     ],
     package_dir = {
-        'dbpool': 'src/'
+        'pgdbpool': 'src/'
     },
     install_requires = [
         'psycopg2'
@@ -40,5 +33,4 @@ setup(
 
     python_requires = '>=3',
     zip_safe = True
-
 )

@@ -7,3 +7,17 @@ dist
 .egg-info
 __pycache__
 report.html
+Module.symvers
+modules.order
+*.o
+*.ko
+*.mod
+*.mod.c
+*.kdev4
+__pycache__
+*.tar
+*.tar.gz
+*.tar.bz2
+.kdev4
+.kate-swp
+.swp

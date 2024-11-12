@@ -173,7 +173,11 @@ class Connection(object):
             connections = cls._config['groups'][group]['connections']
             connection = connections[id]
             new_connection = (connection[0], status)
+<<<<<<< HEAD
             #del(connections[id])
+=======
+            # del(connections[id])
+>>>>>>> ca4b967 (Initial commit.)
             connections[id] = new_connection
             cls.logger.debug('set status id:{} status:{} con_ref:{}'.format(
                     id,
@@ -205,12 +209,21 @@ class Connection(object):
 
                 group_container['connections'][conn_id] = (
                     psycopg2.connect(
+<<<<<<< HEAD
                         dbname = db_container['name'],
                         user = db_container['user'],
                         host = db_container['host'],
                         password = db_container['pass'],
                         sslmode = db_container['ssl'],
                         connect_timeout = db_container['connect_timeout']
+=======
+                        dbname=db_container['name'],
+                        user=db_container['user'],
+                        host=db_container['host'],
+                        password=db_container['pass'],
+                        sslmode=db_container['ssl'],
+                        connect_timeout=db_container['connect_timeout']
+>>>>>>> ca4b967 (Initial commit.)
                     ),
                     'free'
                 )
@@ -224,11 +237,19 @@ class Connection(object):
 
                 if 'sqlprepare' in group_container and group_container['sqlprepare'] is True:
                     tmpCursor = connection.cursor(
+<<<<<<< HEAD
                         cursor_factory = psycopg2.extras.DictCursor
                     )
                     tmpCursor.callproc('"SQLPrepare"."PrepareQueries"')
 
         except:
+=======
+                        cursor_factory=psycopg2.extras.DictCursor
+                    )
+                    tmpCursor.callproc('"SQLPrepare"."PrepareQueries"')
+
+        except Exception as e:
+>>>>>>> ca4b967 (Initial commit.)
             raise DBConnectionError
 
     @classmethod
@@ -318,7 +339,10 @@ class Handler(object):
         )
         return
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ca4b967 (Initial commit.)
     def __init__(self, group):
 
         self.logger = logging.getLogger(__name__)
