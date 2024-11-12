@@ -9,12 +9,12 @@ The **pg-dbpool** Python Module is a tiny database de-multiplexer primarily scop
 ```bash
 
 +----------------------+                         +--------------- -  -   -
-| WebServer Service.py | -- Con Handler #1 ----> | PostgreSQL 
+| WebServer Service.py | -- Handler Con #1 ----> | PostgreSQL 
 | Request / Thread #1  |                         | Backend
 +----------------------+                         |
                                                  |
 +----------------------+                         |
-| WebServer Service.py | -- Con Handler #2 ----> | 
+| WebServer Service.py | -- Handler Con #2 ----> | 
 | Request / Thread #2  |                         |
 +----------------------+                         +--------------- -  -   -
 ```
