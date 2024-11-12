@@ -2,7 +2,7 @@
 
 ## 1. Primary Scope
 
-The **pg-dbpool** Python Module is a tiny database de-multiplexer primarily scoped for Web- / Application Server.
+The **pgdbpool** Python Module is a tiny database de-multiplexer primarily scoped for Web- / Application Server.
 
 ## 2. Current Implementation
 
@@ -36,11 +36,15 @@ This concept works, but the GIL (Python Global Interpreter Lock) thwarts our pla
 
 This means in detail: our concept works, but it is indeed a performance / scaling killer.
 
-## 4. Documentation / Examples
+## 4. Dependencies / Installation
+
+**Python 3** and **psycopg2** module is required. A simple `pip3 install pgdbpool` from PyPi should do the trick.
+
+## 5. Documentation / Examples
 
 See documentation [./doc](./doc) for detailed explanation / illustrative examples.
 
-## 5. Future
+## 6. Future
 
 DB-Pooling also should be usable in FalconAS Python Application Server (https://github.com/WEBcodeX1/http-1.2/).
 
