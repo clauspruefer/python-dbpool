@@ -42,8 +42,7 @@ See documentation [./doc](./doc) for detailed explanation / illustrative example
 
 ## 5. Future
 
-DB-Pooling also should be usable in FalconAS Python Application Server<br>
-(https://github.com/WEBcodeX1/http-1.2/).
+DB-Pooling also should be usable in FalconAS Python Application Server (https://github.com/WEBcodeX1/http-1.2/).
 
 The model here: 1 Process == 1 Python Interpreter (threading-less), GIL Problem solved :grin:.
 
