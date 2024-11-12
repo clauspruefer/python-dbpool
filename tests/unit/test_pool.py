@@ -1,5 +1,3 @@
-# -*- coding: utf8 -*-
-
 import time
 import pytest
 import logging
