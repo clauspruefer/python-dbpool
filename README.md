@@ -37,6 +37,9 @@ The concept works, but the GIL (Python Global Interpreter Lock) thwarts our plan
 
 In detail: if used in a threaded Web-Server setup, it does not really scale well on heavy loads.
 
+>[!IMPORTANT]
+> Take a closer look at **"6. Future"**, problem solved probably.
+
 ## 4. Dependencies / Installation
 
 **Python 3** and **psycopg2** module is required.
