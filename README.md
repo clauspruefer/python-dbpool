@@ -21,7 +21,7 @@ The **pgdbpool** Python Module is a tiny database de-multiplexer primarily scope
 
 ### 2.1. Explanation / Simplicity
 
-If configured in a WebServers WSGI Python Script, the Pooling-Logic is quite simple.
+If configured in a Web-Servers WSGI Python Script, the Pooling-Logic is quite simple.
 
 From a configured **Pool** (Postgres Database Destination, Max Connection Count):
 
