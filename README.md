@@ -32,9 +32,9 @@ From a configured **Pool** (Postgres Database Destination, Max Connection Count)
 
 Currently Thread Safety is guaranteed by `lock = threading.Lock()` which implies a Kernel Mutex syscall().
 
-This concept works, but the GIL (Python Global Interpreter Lock) thwarts our plans 😞.
+The concept works, but the GIL (Python Global Interpreter Lock) thwarts our plans 😞.
 
-This means in detail: our concept works, but it is indeed a performance / scaling killer.
+In detail: our concept works, but it is indeed a performance / scaling killer.
 
 ## 4. Dependencies / Installation
 
