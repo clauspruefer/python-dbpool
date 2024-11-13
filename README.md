@@ -19,14 +19,15 @@ The **pgdbpool** Python Module is a tiny database de-multiplexer primarily scope
 +----------------------+                         +--------------- -  -   -
 ```
 
-### 2.1. Explanation / Simplicity
+### 2.1. Concept / Simplicity
 
 If configured in a Web-Servers WSGI Python Script, the Pooling-Logic is quite simple.
 
-From a configured **Pool** (Postgres Database Destination, Max Connection Count):
-
 1. Check if a free connection in the pool exists
-2. If yes, use it and protect it from beeing used until finished
+2. Check if connection usable (SQL ping)
+3. Use connection and protect it from beeing used until querie(s) finished
+4. Release connection for usage again
+5. Try reconnecting to endpoint if connection has been lost
 
 ## 3. Thread Safety / Global Interpreter Lock
 
@@ -56,4 +57,4 @@ DB-Pooling also should be usable in FalconAS Python Application Server (https://
 The model here: 1 Process == 1 Python Interpreter (threading-less), GIL Problem solved :grin:.
 
 >[!NOTE]
->  Also a Pool should be configurable to use multiple (read-loadbalanced) PostgreSQL endpoints.
+>  Also a Pool should be configurable to use multiple (read-loadbalanced) PostgreSQL Endpoints.
