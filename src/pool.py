@@ -11,18 +11,30 @@ from psycopg2 import extras
 
 
 class DBConnectionError(Exception):
+    """
+    Exception Class, raised on Database Connection Error.
+    """
     pass
 
 
 class DBQueryError(Exception):
+    """
+    Exception Class, raised on Database Query Error.
+    """
     pass
 
 
 class DBOfflineError(Exception):
+    """
+    Exception Class, raised if Database is not pingable.
+    """
     pass
 
 
 class UnconfiguredGroupError(Exception):
+    """
+    Exception Class, raised if Group Configuration is invalid.
+    """
     pass
 
 
@@ -69,39 +81,21 @@ def conn_iter_locked(iterator):
 
 class Connection(object):
     """
-    config = {
-        'db': {
-            'host': 'hostname',
-            'name': 'database',
-            'user': 'dbuser',
-            'pass': 'dbpass',
-            'ssl': False,
-            'connect_timeout': 30,
-            'connection_retry_sleep': 1,
-            'query_timeout': 120,
-            'session_tmp_buffer': 128
-        },
-        'groups': {
-            'group1': {
-                'connection_count': 20,
-                'autocommit': False,
-                'connections': [
-                    (conn, status),
-                ],
-                'connection_iter': None
-            }
-        }
-    }
+    Connection Class.
     """
 
     @classmethod
     def init(cls, config):
+        """
+        """
         cls.logger = logging.getLogger(__name__)
         cls._config = config
         cls._init_class()
 
     @classmethod
     def _init_class(cls):
+        """
+        """
 
         db_config = cls._config['db']
 
@@ -117,6 +111,8 @@ class Connection(object):
 
     @classmethod
     def _setup_groups(cls):
+        """
+        """
         for group in cls._config['groups']:
             cls._config['groups'][group]['connection_iter'] = conn_iter_locked(
                 conn_iter(group)
@@ -125,6 +121,8 @@ class Connection(object):
 
     @classmethod
     def _setup_connections(cls, group):
+        """
+        """
 
         group_container = cls._config['groups'][group]
         group_container['connections'] = []
@@ -139,23 +137,33 @@ class Connection(object):
 
     @classmethod
     def get_max_pool_size(cls, group):
+        """
+        """
         return cls._config['groups'][group]['connection_count']
 
     @classmethod
     def get_connection_iter_container(cls, group):
+        """
+        """
         return cls._config['groups'][group]['connection_iter']
 
     @classmethod
     def get_connection_container(cls, connection):
+        """
+        """
         (group, id) = connection
         return cls._config['groups'][group]['connections'][id]
 
     @classmethod
     def get_connection(cls, connection):
+        """
+        """
         return cls.get_connection_container(connection)
 
     @classmethod
     def get_connection_count(cls, connection):
+        """
+        """
         connection_count = 0
         (group, id) = connection
         connections = cls._config['groups'][group]['connections']
@@ -166,6 +174,8 @@ class Connection(object):
 
     @classmethod
     def set_connection_status(cls, connection, status):
+        """
+        """
         assert status in ['occupied', 'free'], 'status must be free or occupied'
         lock = threading.Lock()
         with lock:
@@ -184,6 +194,8 @@ class Connection(object):
 
     @classmethod
     def get_next_connection(cls, group):
+        """
+        """
         try:
             return next(cls.get_connection_iter_container(group))
         except KeyError:
@@ -191,6 +203,8 @@ class Connection(object):
 
     @classmethod
     def connect(cls, connection):
+        """
+        """
 
         (conn_group, conn_id) = connection
 
@@ -233,6 +247,8 @@ class Connection(object):
 
     @classmethod
     def reconnect(cls, connection):
+        """
+        """
         try:
             Query.check_db(connection)
         except DBOfflineError:
@@ -245,9 +261,14 @@ class Connection(object):
 
 
 class Query(object):
+    """
+    Query Class.
+    """
 
     @staticmethod
     def execute_prepared(connection, sql_params):
+        """
+        """
 
         assert sql_params is not None, "sql_params must be given."
 
@@ -268,6 +289,8 @@ class Query(object):
 
     @staticmethod
     def execute(connection, sql_statement, sql_params=None):
+        """
+        """
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
@@ -281,6 +304,8 @@ class Query(object):
 
     @staticmethod
     def check_db(connection):
+        """
+        """
         (conn_ref, status) = Connection.get_connection(connection)
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -291,20 +316,33 @@ class Query(object):
 
 
 class Handler(object):
+    """
+    (Query) Handler Class.
+    """
 
     def __enter__(self):
+        """
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """
+        """
         self._cleanup()
 
     def query(self, statement, params=None):
+        """
+        """
         return Query.execute(self._connection, statement, params)
 
     def query_prepared(self, params):
+        """
+        """
         return Query.execute_prepared(self._connection, params)
 
     def _cleanup(self):
+        """
+        """
         self.logger.debug('cleanup connection:{}'.format(self._connection))
 
         try:
@@ -320,6 +358,8 @@ class Handler(object):
 
 
     def __init__(self, group):
+        """
+        """
 
         self.logger = logging.getLogger(__name__)
         self._group = group
