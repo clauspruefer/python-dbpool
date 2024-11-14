@@ -4,7 +4,7 @@ import logging
 import psycopg2
 import threading
 
-import pool
+from pgdbpool import pool
 
 
 class DBCursorPatch(object):
