@@ -2,7 +2,7 @@
 
 ## 1. Primary Scope
 
-The **pgdbpool** Python Module is a tiny database de-multiplexer primarily scoped for Web- / Application Server.
+The **pgdbpool** python module is a tiny database connection de-multiplexer primarily scoped for *Web- / Application Server*.
 
 ## 2. Current Implementation
 
