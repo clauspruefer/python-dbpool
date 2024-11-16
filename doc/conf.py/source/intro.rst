@@ -6,6 +6,14 @@ Intro / Module Description
 
 The **pgdbpool** Python Module is a tiny PostgreSQL Database Connection De-Multiplexer primarily scoped for Web- / Application Server.
 
+Basic Install
+=============
+
+.. code-block:: bash
+
+    # install psycopg2
+    pip3 install pgdbpool
+
 Dependencies
 ============
 
@@ -15,6 +23,9 @@ Dependencies
 
     # install psycopg2
     apt-get install python3-psycopg2
+
+Build Dependencies
+==================
 
 On current Debian 12 / Ubuntu 22.04.3, 24.04.1 install the following additional packages (Documentation Rendering & Testing).
 
@@ -34,3 +45,5 @@ Current Features
 
 Feature Requests
 ================
+
+- Connection Load Balancing to multiple (auto-scaled) Database Nodes
