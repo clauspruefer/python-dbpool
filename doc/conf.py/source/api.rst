@@ -9,4 +9,5 @@ pgdbpool
 
 .. automodule:: pgdbpool.pool
    :members: 
+   :special-members:
 
