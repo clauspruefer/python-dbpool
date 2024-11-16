@@ -24,3 +24,7 @@ __pycache__
 .kdev4
 .kate-swp
 .swp
+Makefile
+*.bat
+*.*~
+*.egg-info
