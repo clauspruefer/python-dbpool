@@ -9,6 +9,7 @@
 project = 'Python pgdbpool'
 copyright = '2018 - 2024, Claus Prüfer'
 author = 'Claus Prüfer'
+version = '0.97rc1'
 release = '0.97rc1'
 
 # -- General configuration ---------------------------------------------------
