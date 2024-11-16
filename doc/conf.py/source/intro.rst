@@ -17,7 +17,7 @@ Basic Install
 Dependencies
 ============
 
-**psycopg2** PostgreSQL Python Module is required. Do installation preferable with OS Package Manager.
+**psycopg2** PostgreSQL Python Module is required. Preferable installation with OS Package Manager.
 
 .. code-block:: bash
 
@@ -42,6 +42,7 @@ Current Features
 
 - Connection Pooling in (threaded) Web-Server Environment (Single Destination DB-Node)
 - Automatic DB Reconnection
+- PostgreSQL Prepared Queries Module
 
 Feature Requests
 ================

@@ -9,12 +9,14 @@ Python Module "pgdbpool" Documentation
 Contents:
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 3
 
    intro
    design
-   api
+   build
+   config
    examples
+   api
 
 Indices and tables
 ==================
