@@ -51,13 +51,13 @@ In detail: if used in a threaded Web-Server setup, it does not really scale well
 
 ## 5. Documentation / Examples
 
-See documentation [./doc](./doc) for detailed explanation / illustrative examples.
+See documentation either at ./doc or [https://pythondocs.webcodex.de/pgdbpool/](https://pythondocs.webcodex.de/pgdbpool) for detailed explanation / illustrative examples.
 
 ## 6. Future
 
 DB-Pooling also should be usable in FalconAS Python Application Server (https://github.com/WEBcodeX1/http-1.2/).
 
-The model here: 1 Process == 1 Python Interpreter (threading-less), GIL Problem solved :grin:.
+The model here: 1 Process == 1 Python Interpreter (threading-less), GIL Problem solved.
 
 >[!NOTE]
 >  Also a Pool should be configurable to use multiple (read-loadbalanced) PostgreSQL Endpoints.
