@@ -15,8 +15,8 @@ Contents:
    design
    build
    config
-   examples
    api
+   examples
 
 Indices and tables
 ==================
