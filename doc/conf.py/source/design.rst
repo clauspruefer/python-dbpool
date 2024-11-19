@@ -4,8 +4,8 @@
 Design
 ======
 
-Current Model
-=============
+1. Current Model
+================
 
 Common Web-Application-Server use a threaded or event-based (also threaded) model.
 The following diagrams illustrate how the DB-Connection-Pool works in detail.
@@ -31,8 +31,8 @@ The following diagrams illustrate how the DB-Connection-Pool works in detail.
 - Currently you must implement load sharing to multiple hosts by yourself.
 - Also Python Global Interpreter Lock reduces Performance / Scaling.
 
-Process Based / FalconAS
-========================
+2. Process Based / FalconAS
+===========================
 
 FalconAS is a high speed Python Application Server / Data-Aggregator Middleware.
 

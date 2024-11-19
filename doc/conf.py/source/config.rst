@@ -7,8 +7,8 @@ Configuration
 Basic configuration explanation. See :ref:`examples-label` subsection for more detailed information
 (working Apache WSGI Script).
 
-Root Dict 
-=========
+1. Root Dict 
+============
 
 The root dictionary must contain keys `db` for **Database Connection Config** (see ) and `groups`
 for **Group Config** (see ) .
@@ -22,8 +22,8 @@ for **Group Config** (see ) .
         }
     }
 
-Database Connection 
-===================
+2. Database Connection 
+======================
 
 The Database Connection Configuration JSON schema. It consists of base configuration properties
 and the "groups" dictionary to specify (multiple) group data.
@@ -44,8 +44,8 @@ and the "groups" dictionary to specify (multiple) group data.
         }
 
 
-Database Connection Properties
-==============================
+3. Database Connection Properties
+=================================
 
 .. list-table:: Database Connection Properties
    :widths: 15 10 10 10 10 30
@@ -112,8 +112,8 @@ Database Connection Properties
      - 128
      - Session Buffer Memory
 
-Group Configuration
-===================
+4. Group Configuration
+======================
 
 .. code-block:: python
 
@@ -129,8 +129,8 @@ Group Configuration
         }
 
 
-Group Configuration Properties
-==============================
+5. Group Configuration Properties
+=================================
 
 .. list-table:: Group Properties
    :widths: 15 10 10 10 10 30
@@ -155,8 +155,8 @@ Group Configuration Properties
      - True
      - Autocommit on / off
 
-Internal Default (Values)
-=========================
+6. Internal Default (Values)
+============================
 
 The following schema represensts the internal Python structures. Some values (e.g. groups.id.connections)
 are used to internally store values and should not be overwritten.
@@ -187,8 +187,8 @@ are used to internally store values and should not be overwritten.
         }
     }
 
-Multi Group Example
-===================
+7. Multi Group Example
+======================
 
 To specify a) autocommit and b) non autocommit database connection to the same endpoint.
 
