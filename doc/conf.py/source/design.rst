@@ -57,10 +57,15 @@ FalconAS is a high speed Python Application Server / Data-Aggregator Middleware.
 
 - 1 Client Request will be handled by a *static preloaded* Python Interpreter in 1 OS Process.
 - 1 Process does not need DB Pooling because Client Requests are serial.
-- 1 Process holds 1 DB Connection to 1 Backend Node.
+- 1 Process holds 1 DB Connection to 1 Backend Node (non-loadbalanced).
 - Security is increased because of Process Segmentation / Separation. 
+- Loadbalancing can easily be implemented into this model.
 
 .. warning::
 
     This model currently is not supported by **pgdbpool** module but will be implemented in
-    a future release.
+    the next major release.
+
+.. note::
+
+    Loadbalancing will be implemented *transparently* for both models in a next major release.
