@@ -7,6 +7,21 @@ Configuration
 Basic configuration explanation. See :ref:`examples-label` subsection for more detailed information
 (working Apache WSGI Script).
 
+Root Dict 
+=========
+
+The root dictionary must contain keys `db` for **Database Connection Config** (see ) and `groups`
+for **Group Config** (see ) .
+
+.. code-block:: python
+
+    config = {
+        'db': {
+        },
+        'groups': {
+        }
+    }
+
 Database Connection 
 ===================
 
@@ -29,6 +44,74 @@ and the "groups" dictionary to specify (multiple) group data.
         }
 
 
+Database Connection Properties
+==============================
+
+.. list-table:: Database Connection Properties
+   :widths: 15 10 10 10 10 30
+   :header-rows: 1
+
+   * - Property
+     - Type
+     - Unit
+     - Opt
+     - Def
+     - Description
+   * - host
+     - string
+     - 
+     - 
+     - 
+     - Database Hostname
+   * - name
+     - string
+     - 
+     - 
+     - 
+     - Database Name
+   * - user
+     - string
+     - 
+     - 
+     - 
+     - Database Auth Usern
+   * - pass
+     - string
+     - 
+     - 
+     - 
+     - Database Auth Pass
+   * - ssl
+     - bool
+     - 
+     - x
+     - False
+     - Use SSL / TLS
+   * - connect_timeout
+     - int
+     - Seconds
+     - x
+     - 30
+     - Connect Timeout
+   * - connection_retry_sleep
+     - int
+     - Seconds
+     - x
+     - 1
+     - Sleep Between Connect Retry
+   * - query_timeout
+     - int
+     - Seconds
+     - x
+     - 120
+     - Query Timeout
+   * - session_tmp_buffer
+     - int
+     - Kilobytes
+     - x
+     - 128
+     - Session Buffer Memory
+
 Group Configuration
 ===================
 
@@ -37,16 +120,43 @@ Group Configuration
     config = {
         'db': {
             ...
-            'groups': {
-                'groupname': {
-                    'connection_count': 20,
-                    'autocommit': False
-                }
+        },
+        'groups': {
+            'groupname': {
+                'connection_count': 20,
+                'autocommit': False
             }
         }
 
-Internal Default
-================
+
+Group Configuration Properties
+==============================
+
+.. list-table:: Group Properties
+   :widths: 15 10 10 10 10 30
+   :header-rows: 1
+
+   * - Property
+     - Type
+     - Unit
+     - Opt
+     - Def
+     - Description
+   * - connection_count
+     - int
+     - Quantity
+     - 
+     -
+     - Connection Count
+   * - autocommit
+     - bool
+     - 
+     - x
+     - True
+     - Autocommit on / off
+
+Internal Default (Values)
+=========================
 
 The following schema represensts the internal Python structures. Some values (e.g. groups.id.connections)
 are used to internally store values and should not be overwritten.
