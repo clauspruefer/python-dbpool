@@ -26,7 +26,7 @@ class DBQueryError(Exception):
 
 class DBOfflineError(Exception):
     """
-    Exception Class, raised if Database is not pingable.
+    Exception Class, raised if Database is not reachable.
     """
     pass
 
@@ -39,6 +39,9 @@ class UnconfiguredGroupError(Exception):
 
 
 def conn_iter(connection_group):
+    """
+    Global Connection Iterator.
+    """
 
     logger = logging.getLogger(__name__)
 
@@ -69,6 +72,10 @@ def conn_iter(connection_group):
 
 
 def conn_iter_locked(iterator):
+    """
+    Global Locked Connection Iterator (wrapper).
+    """
+
     lock = threading.Lock()
     while True:
         try:
@@ -86,8 +93,11 @@ class Connection(object):
 
     @classmethod
     def init(cls, config):
+        """ Initialize "static" Class Instance.
+
+        :param dict config: configuration data
         """
-        """
+
         cls.logger = logging.getLogger(__name__)
         cls._config = config
         cls._init_class()
@@ -95,6 +105,10 @@ class Connection(object):
     @classmethod
     def _init_class(cls):
         """
+        Initialize "static" Class Instance.
+
+        - setup global config data
+        - setup groups (call _setup_groups())
         """
 
         db_config = cls._config['db']
@@ -112,7 +126,11 @@ class Connection(object):
     @classmethod
     def _setup_groups(cls):
         """
+        Setup group Config / Iterator(s).
+        
+        - for each group, call _setup_connections(group_name)
         """
+
         for group in cls._config['groups']:
             cls._config['groups'][group]['connection_iter'] = conn_iter_locked(
                 conn_iter(group)
@@ -121,7 +139,11 @@ class Connection(object):
 
     @classmethod
     def _setup_connections(cls, group):
-        """
+        """ Setup Connections per group.
+        
+        :param str group: group name
+
+        - init DB connection for range (0, group.conn_count)
         """
 
         group_container = cls._config['groups'][group]
@@ -137,19 +159,31 @@ class Connection(object):
 
     @classmethod
     def get_max_pool_size(cls, group):
-        """
+        """ Get Connection-Pool size by group name.
+        
+        :param str group: group name
+        :return: connection count
+        :rtype: int
         """
         return cls._config['groups'][group]['connection_count']
 
     @classmethod
     def get_connection_iter_container(cls, group):
-        """
+        """ Get Connection Iterator Container by group name.
+
+        :param str group: group name
+        :return: connection iterator
+        :rtype: iterator
         """
         return cls._config['groups'][group]['connection_iter']
 
     @classmethod
     def get_connection_container(cls, connection):
-        """
+        """ Get Connection Container by Connection.
+
+        :param tuple connection: (group name, group id)
+        :return: connection tuple (conn object ref, conn status)
+        :rtype: tuple
         """
         (group, id) = connection
         return cls._config['groups'][group]['connections'][id]
@@ -157,13 +191,19 @@ class Connection(object):
     @classmethod
     def get_connection(cls, connection):
         """
+        Alias for get_connection_container().
         """
         return cls.get_connection_container(connection)
 
     @classmethod
     def get_connection_count(cls, connection):
+        """ Get Connection count by Connection.
+
+        :param tuple connection: (group name, group id)
+        :return: connection count
+        :rtype: int
         """
-        """
+
         connection_count = 0
         (group, id) = connection
         connections = cls._config['groups'][group]['connections']
@@ -174,7 +214,10 @@ class Connection(object):
 
     @classmethod
     def set_connection_status(cls, connection, status):
-        """
+        """ Set Connection status.
+
+        :param tuple connection: (group name, group id)
+        :param str status: occupied | free.
         """
         assert status in ['occupied', 'free'], 'status must be free or occupied'
         lock = threading.Lock()
@@ -194,7 +237,11 @@ class Connection(object):
 
     @classmethod
     def get_next_connection(cls, group):
-        """
+        """ Get Iterators next() Connection by group name.
+
+        :param str group: group name
+        :return: connection object
+        :rtype: object
         """
         try:
             return next(cls.get_connection_iter_container(group))
@@ -203,7 +250,9 @@ class Connection(object):
 
     @classmethod
     def connect(cls, connection):
-        """
+        """ Connect to Database.
+
+        :param tuple connection: (group name, group id)
         """
 
         (conn_group, conn_id) = connection
@@ -247,7 +296,9 @@ class Connection(object):
 
     @classmethod
     def reconnect(cls, connection):
-        """
+        """ Re-connect to Database.
+
+        :param tuple connection: (group name, group id)
         """
         try:
             Query.check_db(connection)
@@ -267,7 +318,12 @@ class Query(object):
 
     @staticmethod
     def execute_prepared(connection, sql_params):
-        """
+        """ Execute a System Prepared Query.
+
+        See https://github.com/WEBcodeX1/pg_extensions/tree/main/prep_queries.
+
+        :param tuple connection: (group name, group id)
+        :param str sql_params: SQL stored procedure parameters
         """
 
         assert sql_params is not None, "sql_params must be given."
@@ -289,7 +345,11 @@ class Query(object):
 
     @staticmethod
     def execute(connection, sql_statement, sql_params=None):
-        """
+        """ Execute SQL query string.
+
+        :param tuple connection: (group name, group id)
+        :param str sql_statement: SQL statement
+        :param str sql_params: SQL parameters
         """
 
         Connection.reconnect(connection)
@@ -304,7 +364,9 @@ class Query(object):
 
     @staticmethod
     def check_db(connection):
-        """
+        """ Check Database Connection is alive by sending simple now() request.
+
+        :param tuple connection: (group name, group id)
         """
         (conn_ref, status) = Connection.get_connection(connection)
         try:
@@ -316,49 +378,24 @@ class Query(object):
 
 
 class Handler(object):
+    """ (Query) Handler Class.
+
+
+    :example:
+
+    >>> dbpool.Connection.init(config_dict)
+    >>>
+    >>> sql = 'select * from table1'
+    >>>
+    >>> with dbpool.Handler('group1') as db:
+    >>>     for rec in db.query(sql):
+    >>>         print(str(rec))
     """
-    (Query) Handler Class.
-    """
-
-    def __enter__(self):
-        """
-        """
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        """
-        self._cleanup()
-
-    def query(self, statement, params=None):
-        """
-        """
-        return Query.execute(self._connection, statement, params)
-
-    def query_prepared(self, params):
-        """
-        """
-        return Query.execute_prepared(self._connection, params)
-
-    def _cleanup(self):
-        """
-        """
-        self.logger.debug('cleanup connection:{}'.format(self._connection))
-
-        try:
-            self.conn_ref.commit()
-        except Exception as e:
-            pass
-
-        Connection.set_connection_status(
-            (self._group, self._conn_id),
-            'free'
-        )
-        return
-
 
     def __init__(self, group):
-        """
+        """ Initialize Handler.
+
+        :param str group: group name
         """
 
         self.logger = logging.getLogger(__name__)
@@ -372,3 +409,50 @@ class Handler(object):
                 return
             except TypeError:
                 time.sleep(0.1)
+
+    def __enter__(self):
+        """ Overloaded __enter__.
+        """
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """ Overloaded __exit__.
+
+        Call _cleanup() on exit.
+        """
+        self._cleanup()
+
+    def query(self, statement, params=None):
+        """
+        Query Wrapper Class.
+        """
+
+        return Query.execute(self._connection, statement, params)
+
+    def query_prepared(self, params):
+        """
+        Query Prepared Wrapper Class.
+        """
+
+        return Query.execute_prepared(self._connection, params)
+
+    def _cleanup(self):
+        """
+        Cleanup Connection (exit **with** block).
+        
+        - Try to commit() on no autocommit if still unfinished transaction(s)
+        - Set connection status to 'free'
+        """
+
+        self.logger.debug('cleanup connection:{}'.format(self._connection))
+
+        try:
+            self.conn_ref.commit()
+        except Exception as e:
+            pass
+
+        Connection.set_connection_status(
+            (self._group, self._conn_id),
+            'free'
+        )
+        return
