@@ -4,10 +4,12 @@
 Internal Class Representation 
 =============================
 
-1. pgdbpool
-===========
+pgdbpool
+========
 
 .. automodule:: pgdbpool.pool
-   :members: 
+   :members: conn_iter, conn_iter_locked, Connection, Query, Handler
    :special-members:
-   :exclude-members: __wekref__
+   :private-members:
+   :exclude-members: __weakref__
+   :show-inheritance:

@@ -28,8 +28,8 @@ The following diagrams illustrate how the DB-Connection-Pool works in detail.
     | Database Cluster                                                            |
     +-----------------------------------------------------------------------------+
 
-- Currently you must implement load sharing to multiple hosts by yourself.
-- Also Python Global Interpreter Lock reduces Performance / Scaling.
+- Currently you have to care about load-sharing to multiple hosts by yourself.
+- Also Python Global Interpreter Lock reduces Performance / Scalability.
 
 2. Process Based / FalconAS
 ===========================
