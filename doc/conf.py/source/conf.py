@@ -9,7 +9,7 @@
 project = 'Python pgdbpool'
 copyright = '2018 - 2024, Claus Prüfer'
 author = 'Claus Prüfer'
-version = '0.98rc1'
+version = '0.98'
 release = '0.98rc1'
 
 # -- General configuration ---------------------------------------------------
@@ -30,4 +30,3 @@ autodoc_member_order = 'bysource'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
