@@ -51,7 +51,7 @@ In detail: if used in a threaded Web-Server setup, it does not really scale well
 
 ## 5. Documentation / Examples
 
-See documentation either at ./doc or [https://pythondocs.webcodex.de/pgdbpool/](https://pythondocs.webcodex.de/pgdbpool) for detailed explanation / illustrative examples.
+See documentation either at ./doc or [https://pythondocs.webcodex.de/pgdbpool](https://pythondocs.webcodex.de/pgdbpool) for detailed explanation / illustrative examples.
 
 ## 6. Future
 
