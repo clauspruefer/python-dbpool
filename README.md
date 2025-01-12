@@ -42,11 +42,12 @@ In detail: if used in a threaded Web-Server setup, it does not really scale well
 
 ## 4. Dependencies / Installation
 
-**Python 3** and **psycopg2** module is required.
+**Python3** and **psycopg2** module is required.
 
 ```bash
-# apt-get install python3-psycopg2
-# pip install pgdbpool
+# install (debian)
+apt-get install python3-psycopg2
+pip install pgdbpool
 ```
 
 ## 5. Documentation / Examples
