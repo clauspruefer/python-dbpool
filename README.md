@@ -65,3 +65,5 @@ The model here: 1 Process == 1 Python Interpreter (threading-less), GIL Problem 
 
 >[!NOTE]
 >  Also a Pool should be configurable to use multiple (read-loadbalanced) PostgreSQL Endpoints.
+
+[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
