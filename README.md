@@ -1,5 +1,7 @@
 # Python PgDatabase-Pool Module
 
+![push main](https://github.com/clauspruefer/python-dbpool/actions/workflows/pylint.yaml/badge.svg)
+
 ## 1. Primary Scope
 
 The **pgdbpool** Python Module is a tiny PostgreSQL Database Connection De-Multiplexer primarily scoped for *Web- / Application Server*.
