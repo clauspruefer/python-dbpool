@@ -5,11 +5,7 @@
 
 ## 1. Primary Scope
 
-<<<<<<< HEAD
-The **pgdbpool** Python Module is a tiny **PostgreSQL Database Connection De-Multiplexer** primarily scoped for *Web- / Application Server*.
-=======
 The **pgdbpool** Python module is a tiny **PostgreSQL Database Connection De-Multiplexer**, primarily designed for *Web- / Application Servers*.
->>>>>>> cb59058 (Corrected syntactically)
 
 ## 2. Current Implementation
 
@@ -46,11 +42,7 @@ While this concept works, the GIL (Global Interpreter Lock) in Python thwarts sc
 
 ## 4. Dependencies / Installation
 
-<<<<<<< HEAD
-**Python3** and **psycopg2** module is required.
-=======
 **Python 3** and the **psycopg2** module are required.
->>>>>>> cb59058 (Corrected syntactically)
 
 ```bash
 # install (debian)
@@ -60,12 +52,8 @@ pip install pgdbpool
 
 ## 5. Documentation / Examples
 
-<<<<<<< HEAD
-See documentation either at ./doc or [https://pythondocs.webcodex.de/pgdbpool](https://pythondocs.webcodex.de/pgdbpool) for detailed explanation / illustrative examples.
-=======
-Detailed documentation and examples can be found in the `./doc` directory
-or at: https://pythondocs.webcodex.de/pgdbpool
->>>>>>> cb59058 (Corrected syntactically)
+See documentation either at `./doc` or [https://pythondocs.webcodex.de/pgdbpool](https://pythondocs.webcodex.de/pgdbpool)
+for detailed explanation / illustrative examples.
 
 ## 6. Future
 
@@ -76,11 +64,7 @@ The proposed model: **1 Process == 1 Python Interpreter (threading-less)**,
 effectively solving the GIL issue.
 
 >[!NOTE]
-<<<<<<< HEAD
->  Also a Pool should be configurable to use multiple (read-loadbalanced) PostgreSQL Endpoints.
+> The pool should also be configurable to use multiple (read-load-balanced)
+> PostgreSQL endpoints.
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
-=======
->  The pool should also be configurable to use multiple (read-load-balanced)
-> PostgreSQL endpoints.
->>>>>>> cb59058 (Corrected syntactically)
