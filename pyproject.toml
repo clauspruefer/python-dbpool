@@ -13,7 +13,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Operating System :: OS Independent",
 ]
 dependencies = [
@@ -24,3 +24,4 @@ dependencies = [
 Homepage = "https://github.com/clauspruefer/python-dbpool"
 Issues = "https://github.com/clauspruefer/python-dbpool/issues"
 Documentation = "https://pythondocs.webcodex.de/pgdbpool"
+Changelog = "https://github.com/clauspruefer/python-dbpool/CHANGELOG.md"
