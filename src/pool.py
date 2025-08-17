@@ -429,6 +429,12 @@ class Handler(object):
 
         return Query.execute(self._connection, statement, params)
 
+    def commit(self):
+        """
+        Manual commit() procedure used for autocommit=False connections
+        """
+        self.conn_ref.commit()
+
     def query_prepared(self, params):
         """
         Query Prepared Wrapper Class.
