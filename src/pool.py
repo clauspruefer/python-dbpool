@@ -98,6 +98,8 @@ class Connection(object):
         :param dict config: configuration data
         """
 
+        assert isinstance(config, dict), 'config must be dict type'
+
         cls.logger = logging.getLogger(__name__)
         cls._config = config
         cls._init_class()
@@ -110,6 +112,13 @@ class Connection(object):
         - setup global config data
         - setup groups (call _setup_groups())
         """
+
+        # convert single dict type to list containing 1 dict element
+        if isinstance(cls._config['db'], dict):
+            cls._config['db'] = [ cls._config['db'] ]
+
+        # create default iterator from list
+        cls._config['dbiter'] = iter(cls._config['db'])
 
         db_config = cls._config['db']
 
@@ -220,13 +229,12 @@ class Connection(object):
         :param str status: occupied | free.
         """
         assert status in ['occupied', 'free'], 'status must be free or occupied'
-        lock = threading.Lock()
-        with lock:
+
+        def process():
             (group, id) = connection
             connections = cls._config['groups'][group]['connections']
             connection = connections[id]
             new_connection = (connection[0], status)
-            # del(connections[id])
             connections[id] = new_connection
             cls.logger.debug('set status id:{} status:{} con_ref:{}'.format(
                     id,
@@ -234,6 +242,13 @@ class Connection(object):
                     new_connection[0]
                 )
             )
+
+        if 'type' in cls._config and cls._config.get('type') == 'non-threaded':
+            process()
+        else:
+            lock = threading.Lock()
+            with lock:
+                process()
 
     @classmethod
     def get_next_connection(cls, group):
@@ -259,11 +274,15 @@ class Connection(object):
 
         try:
 
-            lock = threading.Lock()
+            try:
+                db_container = next(cls._config['dbiter'])
+            except StopIteration:
+                cls._config['dbiter'] = iter(cls._config['db'])
+                db_container = next(cls._config['dbiter'])
 
-            db_container = cls._config['db']
             group_container = cls._config['groups'][conn_group]
 
+            lock = threading.Lock()
             with lock:
 
                 group_container['connections'][conn_id] = (
