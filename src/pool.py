@@ -2,8 +2,8 @@ import os
 import time
 import json
 import logging
-import psycopg2
 import threading
+import psycopg2
 
 from psycopg2 import extras
 
