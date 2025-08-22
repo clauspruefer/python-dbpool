@@ -156,7 +156,7 @@ class Connection(object):
                 (None, 'connecting')
             )
             cls.connect((group, conn_id))
-        cls.logger.debug('configuration:'.format(cls._config))
+        cls.logger.debug('configuration:{}'.format(cls._config))
 
     @classmethod
     def get_threading_model(cls):
