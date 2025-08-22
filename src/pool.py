@@ -236,8 +236,8 @@ class Connection(object):
 
         (group, id) = connection
         connections = cls._config['groups'][group]['connections']
-        connection = connections[id]
-        new_connection = (connection[0], status)
+        connection_by_id = connections[id]
+        new_connection = (connection_by_id[0], status)
         connections[id] = new_connection
         cls.logger.debug('set status id:{} status:{} con_ref:{}'.format(
                 id,
