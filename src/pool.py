@@ -155,7 +155,7 @@ class Connection(object):
                 (None, 'connecting')
             )
             cls.connect((group, conn_id))
-        cls.logger.debug(cls._config)
+        cls.logger.debug('configuration:'.format(cls._config))
 
     @classmethod
     def get_threading_model(cls):
@@ -295,7 +295,7 @@ class Connection(object):
                 tmpCursor.callproc('"SQLPrepare"."PrepareQueries"')
 
         except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.InternalError) as e:
-            self.logger.debug('connection connect() exception:{}'.format(repr(e)))
+            cls.logger.debug('connection connect() exception:{}'.format(repr(e)))
             raise DBConnectionError
 
     @classmethod
@@ -309,11 +309,11 @@ class Connection(object):
         except DBOfflineError:
             for i in range(0, 10):
                 try:
-                    self.logger.debug('connection reconnect() try nr:{}'.format(i))
+                    cls.logger.debug('connection reconnect() try nr:{}'.format(i))
                     Connection.connect(connection)
                     return
                 except DBConnectionError as e:
-                    self.logger.debug('connection reconnect() exception:{}'.format(repr(e)))
+                    cls.logger.debug('connection reconnect() exception:{}'.format(repr(e)))
                     time.sleep(cls._config['db']['connection_retry_sleep'])
 
 
@@ -336,7 +336,7 @@ class Query(object):
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
-        self.logger.debug('query execute_prepared() connection status:{}'.format(status))
+        Connection.logger.debug('query execute_prepared() connection status:{}'.format(status))
 
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -361,14 +361,14 @@ class Query(object):
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
-        self.logger.debug('query execute() connection status:{}'.format(status))
+        Connection.logger.debug('query execute() connection status:{}'.format(status))
 
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
             tmpCursor.execute(sql_statement, sql_params)
             return tmpCursor
         except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
-            self.logger.debug('query execute() exception:{}'.format(repr(e)))
+            Connection.logger.debug('query execute() exception:{}'.format(repr(e)))
             raise DBQueryError(repr(e))
 
     @staticmethod
@@ -380,14 +380,14 @@ class Query(object):
         :param tuple connection: (group name, group id)
         """
         (conn_ref, status) = Connection.get_connection(connection)
-        self.logger.debug('query check_db() connection status:{}'.format(status))
+        Connection.logger.debug('query check_db() connection status:{}'.format(status))
 
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
             tmpCursor.execute("SELECT to_char(now(), 'HH:MI:SS') AS result")
             tmpCursor.fetchone()
         except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.InternalError) as e:
-            self.logger.debug('query check_db() exception:{}'.format(repr(e)))
+            Connection.logger.debug('query check_db() exception:{}'.format(repr(e)))
             raise DBOfflineError
 
 
