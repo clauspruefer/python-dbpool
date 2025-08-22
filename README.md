@@ -1,4 +1,4 @@
-# Python PgDatabase-Pool Module
+# :elephant: Python PgDatabase-Pool Module
 
 ![push main](https://github.com/clauspruefer/python-dbpool/actions/workflows/pylint.yaml/badge.svg)
 [![PyPI version](https://badge.fury.io/py/pgdbpool.svg)](https://badge.fury.io/py/pgdbpool)
