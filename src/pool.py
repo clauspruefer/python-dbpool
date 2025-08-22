@@ -2,8 +2,8 @@ import os
 import time
 import json
 import logging
-import psycopg2
 import threading
+import psycopg2
 
 from psycopg2 import extras
 
@@ -12,28 +12,24 @@ class DBConnectionError(Exception):
     """
     Exception Class, raised on Database Connection Error.
     """
-    pass
 
 
 class DBQueryError(Exception):
     """
     Exception Class, raised on Database Query Error.
     """
-    pass
 
 
 class DBOfflineError(Exception):
     """
     Exception Class, raised on Database Not Reachable Error.
     """
-    pass
 
 
 class UnconfiguredGroupError(Exception):
     """
     Exception Class, raised on Invalid Group Configuration Error.
     """
-    pass
 
 
 def conn_iter(connection_group):
@@ -217,8 +213,10 @@ class Connection(object):
 
         connection_count = 0
         (group, group_id) = connection
+        cls.logger.debug('connection get_connection_count() group_id:{}'.format(group_id))
         connections = cls._config['groups'][group]['connections']
         for (conn_ref, status) in connections:
+            cls.logger.debug('connection get_connection_count() conn_ref:{} status:{}'.format(conn_ref, status))
             if status == 'occupied':
                 connection_count += 1
         return connection_count
@@ -237,7 +235,7 @@ class Connection(object):
         connection_by_id = connections[group_id]
         new_connection = (connection_by_id[0], status)
         connections[group_id] = new_connection
-        cls.logger.debug('set status group_id:{} status:{} con_ref:{}'.format(
+        cls.logger.debug('connection set_connection_status() group_id:{} status:{} con_ref:{}'.format(
                 group_id,
                 status,
                 new_connection[0]
@@ -485,11 +483,10 @@ class Handler(object):
 
         try:
             self.conn_ref.commit()
-        except Exception as e:
-            pass
+        except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.InternalError) as e:
+            self.logger.debug('cleanup connection:{}'.format(repr(e)))
 
         Connection.set_connection_status(
             (self._group, self._conn_id),
             'free'
         )
-        return
