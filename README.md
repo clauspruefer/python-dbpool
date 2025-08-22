@@ -156,12 +156,13 @@ Python Application Server (https://github.com/WEBcodeX1/http-1.2).
 The implemented model: **1 Process == 1 Python Interpreter (threading-less)**,
 effectively solving the GIL issue through the `non-threaded` configuration mode.
 
-### 6.2. Load Balancing ✅
+### 6.2. Load Balancing
 
 The pool now supports multiple (read-load-balanced) PostgreSQL endpoints:
 
-✅ **Implemented**: Multiple database endpoint configuration  
-✅ **Implemented**: Automatic connection distribution across endpoints  
+✅ **Implemented**: Multiple database endpoint configuration
+✅ **Implemented**: Automatic connection distribution across endpoints
 ✅ **Implemented**: Built-in load balancing for database connections
+✅ **Implemented**: Read / write / endpoint group separation
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
