@@ -74,10 +74,9 @@ class Connection(object):
     def init(cls, config):
         """ Initialize "static" Class Instance.
 
-        :param dict config: configuration data
+        :param dict config: single configuration data
+        :param list of dict config: multiple configuration data
         """
-
-        assert isinstance(config, dict), 'config must be dict type'
 
         cls.logger = logging.getLogger(__name__)
         cls._config = config
@@ -267,6 +266,8 @@ class Connection(object):
         try:
             db_container = next(cls._dbiter_ref)
             group_container = cls._config['groups'][conn_group]
+
+            cls.logger.debug('connection connect() db_config:{}'.format(db_container))
 
             group_container['connections'][conn_id] = (
                 psycopg2.connect(
