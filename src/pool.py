@@ -32,6 +32,9 @@ class UnconfiguredGroupError(Exception):
     """
 
 
+global_lock = threading.Lock()
+
+
 def conn_iter(connection_group):
     """
     Global Connection Iterator.
@@ -417,12 +420,12 @@ class Handler(object):
 
         threading_model = Connection.get_threading_model()
         assert threading_model in ['threaded', 'non-threaded'], 'threading model must be threaded or non-threaded.'
+        self.logger.info('handler() __init__() threading_model:{}'.format(threading_model))
 
         while True:
             try:
                 if threading_model == 'threaded':
-                    lock = threading.Lock()
-                    with lock:
+                    with global_lock:
                         self._process()
                 else:
                     self._process()
