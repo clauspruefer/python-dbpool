@@ -7,21 +7,36 @@
 
 The **pgdbpool** Python module is a tiny **PostgreSQL Database Connection De-Multiplexer**, primarily designed for *Web- / Application Servers*.
 
+**Key Features:**
+- **Multi-endpoint support**: Load balance across multiple PostgreSQL servers
+- **Flexible threading models**: Choose between threaded and non-threaded modes
+- **Transaction control**: Manual commit support for complex transactions
+- **High availability**: Built-in failover and connection management
+
 ## 2. Current Implementation
 
 ```text
 +----------------------+                         +---------------------
 | WebServer Service.py | -- Handler Con #1 ----> | PostgreSQL
-| Request / Thread #1  |                         | Backend
+| Request / Thread #1  |                         | Backend #1
 +----------------------+                         |
                                                  |
 +----------------------+                         |
-| WebServer Service.py | -- Handler Con #2 ----> |
-| Request / Thread #2  |                         |
+| WebServer Service.py | -- Handler Con #2 ----> | PostgreSQL
+| Request / Thread #2  |                         | Backend #2
 +----------------------+                         +---------------------
 ```
 
-### 2.1. Concept / Simplicity
+### 2.1. Multiple Database Endpoints
+
+The connection pool now supports **multiple PostgreSQL database endpoints** for load balancing and high availability:
+
+- Configure multiple database hosts in the configuration
+- Connections are automatically distributed across available endpoints
+- Provides built-in load balancing for read operations
+- Enhances fault tolerance and scalability
+
+### 2.2. Concept / Simplicity
 
 If configured in a Web Server's WSGI Python script, the pooling logic is straightforward:
 
@@ -33,12 +48,29 @@ If configured in a Web Server's WSGI Python script, the pooling logic is straigh
 
 ## 3. Thread Safety / Global Interpreter Lock
 
-Thread safety is currently ensured via `lock = threading.Lock()`, which relies on a kernel mutex `syscall()`.
+### 3.1. Threading Model Configuration
+
+The pool now supports **two threading models** that can be configured based on your application's architecture:
+
+- **`threaded`** (default): Uses `threading.Lock()` for thread safety, suitable for traditional multi-threaded web servers
+- **`non-threaded`**: Disables locking for single-threaded applications, eliminating GIL overhead
+
+### 3.2. Threaded Mode
+
+Thread safety is ensured via `lock = threading.Lock()`, which relies on a kernel mutex `syscall()`.
 
 While this concept works, the GIL (Global Interpreter Lock) in Python thwarts scalability under heavy loads in a threaded Web Server setup.
 
+### 3.3. Non-Threaded Mode
+
+For applications using a single-threaded, process-per-request model (like the FalconAS Python Application Server), the non-threaded mode provides:
+
+- **No locking overhead** - eliminates mutex syscalls
+- **Better performance** - avoids GIL contention  
+- **Simpler architecture** - designed for 1 Process == 1 Python Interpreter
+
 >[!IMPORTANT]
-> Refer to Section **6: Future** for a potential solution to this problem.
+> Refer to Section **6: Future** for more details on threading-less architectures.
 
 ## 4. Dependencies / Installation
 
@@ -55,16 +87,90 @@ pip install pgdbpool
 See documentation either at `./doc` or [https://pythondocs.webcodex.de/pgdbpool](https://pythondocs.webcodex.de/pgdbpool)
 for detailed explanation / illustrative examples.
 
+### 5.1. Multiple Database Configuration
+
+```python
+config = {
+    'db': [
+        {
+            'host': 'postgres-server-1.example.com',
+            'name': 'mydb',
+            'user': 'dbuser',
+            'pass': 'dbpass'
+        },
+        {
+            'host': 'postgres-server-2.example.com', 
+            'name': 'mydb',
+            'user': 'dbuser',
+            'pass': 'dbpass'
+        }
+    ],
+    'groups': {
+        'default': {
+            'connection_count': 20,
+            'autocommit': True
+        }
+    }
+}
+```
+
+### 5.2. Threading Model Configuration
+
+```python
+# For non-threaded applications (e.g., FalconAS)
+config = {
+    'type': 'non-threaded',
+    'db': { ... },
+    'groups': { ... }
+}
+
+# For traditional threaded applications (default)
+config = {
+    'type': 'threaded',  # or omit for default
+    'db': { ... },
+    'groups': { ... }
+}
+```
+
+### 5.3. Manual Transaction Control
+
+```python
+import pgdbpool as dbpool
+
+dbpool.Connection.init(config)
+
+# For autocommit=False connections
+with dbpool.Handler('group1') as db:
+    db.query('INSERT INTO table1 VALUES (%s)', ('value1',))
+    db.query('INSERT INTO table2 VALUES (%s)', ('value2',))
+    db.commit()  # Manual commit
+```
+
 ## 6. Future
 
-The DB-pooling functionality should also be compatible with the FalconAS
+### 6.1. FalconAS Compatibility
+
+The DB-pooling functionality is now compatible with the FalconAS
 Python Application Server (https://github.com/WEBcodeX1/http-1.2).
 
-The proposed model: **1 Process == 1 Python Interpreter (threading-less)**,
-effectively solving the GIL issue.
+The implemented model: **1 Process == 1 Python Interpreter (threading-less)**,
+effectively solving the GIL issue through the `non-threaded` configuration mode.
+
+### 6.2. Load Balancing ✅
+
+The pool now supports multiple (read-load-balanced) PostgreSQL endpoints:
+
+✅ **Implemented**: Multiple database endpoint configuration  
+✅ **Implemented**: Automatic connection distribution across endpoints  
+✅ **Implemented**: Built-in load balancing for database connections
+
+### 6.3. Upcoming Features
 
 >[!NOTE]
-> The pool should also be configurable to use multiple (read-load-balanced)
-> PostgreSQL endpoints.
+> Future enhancements may include:
+> - Write/read replica separation
+> - Failover mechanisms
+> - Connection health monitoring
+> - Geographic load balancing
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
