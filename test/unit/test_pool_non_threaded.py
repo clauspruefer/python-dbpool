@@ -44,6 +44,7 @@ def patched_connect(*, dbname, user, host, password, sslmode, connect_timeout):
 @pytest.fixture
 def connection_config_single():
     config = {
+        'type': 'non-threaded',
         'db': {
             'host': '127.0.0.1',
             'name': 'testdb',
@@ -67,6 +68,7 @@ def connection_config_single():
 @pytest.fixture
 def connection_config_multi():
     config = {
+        'type': 'non-threaded',
         'db':
         [
             {
