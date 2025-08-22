@@ -105,6 +105,9 @@ class Connection(object):
         # setup db connection iterator
         cls._dbiter_ref = cls._dbiter()
 
+        # ref db_config
+        db_config = cls._config['db'][0]
+
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
 
@@ -159,11 +162,12 @@ class Connection(object):
 
     @classmethod
     def get_threading_model(cls):
-        """ Return Threading Model / Type".
+        """ Return Threading Model / Type.
 
         :return: threading model (threaded | non-threaded)
         :rtype: string
         """
+
         return False if 'type' in cls._config and cls._config.get('type') == 'non-threaded' else True
 
     @classmethod
@@ -244,7 +248,7 @@ class Connection(object):
 
     @classmethod
     def get_next_connection(cls, group):
-        """ Get Iterators next() Connection By "group name"".
+        """ Get Iterators next() Connection By "group name".
 
         :param str group: group name
         :return: connection object
@@ -455,7 +459,7 @@ class Handler(object):
         Process next() Connection.
         """
 
-        (self._conn_id, self.conn_ref) = Connection.get_next_connection(group)
+        (self._conn_id, self.conn_ref) = Connection.get_next_connection(self._group)
         self._connection = (self._group, self._conn_id)
         self.logger.debug('Handler() Connection:{}'.format(self._connection))
 
