@@ -164,13 +164,4 @@ The pool now supports multiple (read-load-balanced) PostgreSQL endpoints:
 ✅ **Implemented**: Automatic connection distribution across endpoints  
 ✅ **Implemented**: Built-in load balancing for database connections
 
-### 6.3. Upcoming Features
-
->[!NOTE]
-> Future enhancements may include:
-> - Write/read replica separation
-> - Failover mechanisms
-> - Connection health monitoring
-> - Geographic load balancing
-
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
