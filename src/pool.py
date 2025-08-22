@@ -12,28 +12,28 @@ from psycopg2 import extras
 
 class DBConnectionError(Exception):
     """
-    Exception Class, Raised On Database Connection Error.
+    Exception Class, raised on Database Connection Error.
     """
     pass
 
 
 class DBQueryError(Exception):
     """
-    Exception Class, Raised On Database Query Error.
+    Exception Class, raised on Database Query Error.
     """
     pass
 
 
 class DBOfflineError(Exception):
     """
-    Exception Class, Raised On Database Not Reachable.
+    Exception Class, raised on Database Not Reachable Error.
     """
     pass
 
 
 class UnconfiguredGroupError(Exception):
     """
-    Exception Class, Raised On Group Configuration Invalid.
+    Exception Class, raised on Invalid Group Configuration Error.
     """
     pass
 
@@ -100,7 +100,7 @@ class Connection(object):
 
         # convert single dict type to list containing 1 dict element
         if isinstance(cls._config['db'], dict):
-            cls._config['db'] = [ cls._config['db'] ]
+            cls._config['db'] = [cls._config['db']]
 
         # setup db connection iterator
         cls._dbiter_ref = cls._dbiter()
@@ -142,7 +142,7 @@ class Connection(object):
 
     @classmethod
     def _setup_connections(cls, group):
-        """ Setup Connections Per "group".
+        """ Setup Connections per "group".
         
         :param str group: group name
 
@@ -172,7 +172,7 @@ class Connection(object):
 
     @classmethod
     def get_max_pool_size(cls, group):
-        """ Get Connection-Pool Size By "group name".
+        """ Get Connection-Pool Size by "group name".
         
         :param str group: group name
         :return: connection count
@@ -182,7 +182,7 @@ class Connection(object):
 
     @classmethod
     def get_connection_iter_container(cls, group):
-        """ Get Connection Iterator Container By "group name".
+        """ Get Connection Iterator Container by "group name".
 
         :param str group: group name
         :return: connection iterator
@@ -192,7 +192,7 @@ class Connection(object):
 
     @classmethod
     def get_connection_container(cls, connection):
-        """ Get Connection Container By Connection.
+        """ Get Connection Container by Connection.
 
         :param tuple connection: (group name, group id)
         :return: connection tuple (conn object ref, conn status)
@@ -204,13 +204,13 @@ class Connection(object):
     @classmethod
     def get_connection(cls, connection):
         """
-        Alias For "get_connection_container()".
+        Alias for "get_connection_container()".
         """
         return cls.get_connection_container(connection)
 
     @classmethod
     def get_connection_count(cls, connection):
-        """ Get Connection Count By Connection.
+        """ Get Connection Count by Connection.
 
         :param tuple connection: (group name, group id)
         :return: connection count
@@ -232,7 +232,7 @@ class Connection(object):
         :param tuple connection: (group name, group id)
         :param str status: occupied | free.
         """
-        assert status in ['occupied', 'free'], 'status must be "free" or "occupied"'
+        assert status in ['occupied', 'free'], 'status must be free or occupied'
 
         (group, id) = connection
         connections = cls._config['groups'][group]['connections']
@@ -248,7 +248,7 @@ class Connection(object):
 
     @classmethod
     def get_next_connection(cls, group):
-        """ Get Iterators next() Connection By "group name".
+        """ Get Iterators next() Connection by "group name".
 
         :param str group: group name
         :return: connection object
@@ -261,7 +261,7 @@ class Connection(object):
 
     @classmethod
     def connect(cls, connection):
-        """ Connect To Database.
+        """ Connect to Database.
 
         :param tuple connection: (group name, group id)
         """
@@ -352,7 +352,7 @@ class Query(object):
 
     @staticmethod
     def execute(connection, sql_statement, sql_params=None):
-        """ Execute SQL query string.
+        """ Execute SQL Query String.
 
         :param tuple connection: (group name, group id)
         :param str sql_statement: SQL statement
@@ -371,7 +371,9 @@ class Query(object):
 
     @staticmethod
     def check_db(connection):
-        """ Check Database Connection is alive by sending simple now() request.
+        """ Check Database Connection.
+
+        Check Database Connection is alive by sending simple now() request.
 
         :param tuple connection: (group name, group id)
         """
@@ -435,15 +437,15 @@ class Handler(object):
         self._cleanup()
 
     def query(self, statement, params=None):
-        """
-        Query Wrapper Class.
+        """ Query Wrapper Class.
         """
 
         return Query.execute(self._connection, statement, params)
 
     def commit(self):
-        """
-        Manual "commit()" Procedure Used For "autocommit=False" Connections
+        """ Commit Transaction.
+
+        Manual commit() procedure used for `autocommit=False` connections.
         """
         self.conn_ref.commit()
 
@@ -464,7 +466,8 @@ class Handler(object):
         self.logger.debug('Handler() Connection:{}'.format(self._connection))
 
     def _cleanup(self):
-        """
+        """ Cleanup Connection.
+
         Cleanup Connection (exit **with** block).
         
         - Try to commit() on no autocommit if still unfinished transaction(s)
