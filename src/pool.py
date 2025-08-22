@@ -168,7 +168,7 @@ class Connection(object):
         :rtype: string
         """
 
-        return 'non-threaded' if 'type' in cls._config and cls._config.get('type') == 'non-threaded' else 'threaded'
+        return 'threaded' if 'type' not in cls._config else cls._config.get('type')
 
     @classmethod
     def get_max_pool_size(cls, group):
@@ -333,7 +333,7 @@ class Query(object):
         :param str sql_params: SQL stored procedure parameters
         """
 
-        assert sql_params is not None, "sql_params must be given."
+        assert sql_params is not None, 'sql_params must be given.'
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
@@ -411,6 +411,7 @@ class Handler(object):
         self._group = group
 
         threading_model = Connection.get_threading_model()
+        assert threading_model in ['threaded', 'non-threaded'], 'threading model must be threaded or non-threaded.'
 
         while True:
             try:
