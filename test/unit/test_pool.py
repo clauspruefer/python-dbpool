@@ -58,7 +58,7 @@ def connection_config():
         'groups': {
             'group1': {
                 'connection_count': 5,
-                'autocommit': False,
+                'autocommit': False
             }
         }
     }
