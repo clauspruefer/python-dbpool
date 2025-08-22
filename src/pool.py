@@ -33,7 +33,7 @@ class DBOfflineError(Exception):
 
 class UnconfiguredGroupError(Exception):
     """
-    Exception Class, Raised on Group Configuration Invalid.
+    Exception Class, Raised On Group Configuration Invalid.
     """
     pass
 
@@ -168,7 +168,7 @@ class Connection(object):
         :rtype: string
         """
 
-        return False if 'type' in cls._config and cls._config.get('type') == 'non-threaded' else True
+        return 'non-threaded' if 'type' in cls._config and cls._config.get('type') == 'non-threaded' else 'threaded'
 
     @classmethod
     def get_max_pool_size(cls, group):
@@ -412,7 +412,7 @@ class Handler(object):
 
         while True:
             try:
-                if threading_model is True:
+                if threading_model == 'threaded':
                     lock = threading.Lock()
                     with lock:
                         self._process()
