@@ -73,9 +73,7 @@ class TestFunctional:
 
         pool.Connection.init(connection_config)
 
-        i = pool.conn_iter_locked(
-            pool.conn_iter('group1')
-        )
+        i = pool.conn_iter('group1')
 
         r1 = next(i)
         r2 = next(i)
@@ -190,9 +188,7 @@ class TestThreading:
 
         pool.Connection.init(connection_config)
 
-        i = pool.conn_iter_locked(
-            pool.conn_iter('group1')
-        )
+        i = pool.conn_iter('group1')
 
         def get_next_1(i):
             next(i)

@@ -26,14 +26,14 @@ class DBQueryError(Exception):
 
 class DBOfflineError(Exception):
     """
-    Exception Class, raised if Database is not reachable.
+    Exception Class, raised on Database Not Reachable Error.
     """
     pass
 
 
 class UnconfiguredGroupError(Exception):
     """
-    Exception Class, raised if Group Configuration is invalid.
+    Exception Class, raised on Invalid Group Configuration Error.
     """
     pass
 
@@ -71,21 +71,6 @@ def conn_iter(connection_group):
             connection_id = 0
 
 
-def conn_iter_locked(iterator):
-    """
-    Global Locked Connection Iterator (wrapper).
-    """
-
-    lock = threading.Lock()
-    while True:
-        try:
-            with lock:
-                value = next(iterator)
-                yield value
-        except StopIteration:
-            return
-
-
 class Connection(object):
     """
     Connection Class.
@@ -97,6 +82,8 @@ class Connection(object):
 
         :param dict config: configuration data
         """
+
+        assert isinstance(config, dict), 'config must be dict type'
 
         cls.logger = logging.getLogger(__name__)
         cls._config = config
@@ -111,7 +98,15 @@ class Connection(object):
         - setup groups (call _setup_groups())
         """
 
-        db_config = cls._config['db']
+        # convert single dict type to list containing 1 dict element
+        if isinstance(cls._config['db'], dict):
+            cls._config['db'] = [cls._config['db']]
+
+        # setup db connection iterator
+        cls._dbiter_ref = cls._dbiter()
+
+        # ref db_config
+        db_config = cls._config['db'][0]
 
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
@@ -124,22 +119,30 @@ class Connection(object):
         cls._setup_groups()
 
     @classmethod
+    def _dbiter(cls):
+        """
+        DB Connection Iterator.
+        """
+
+        while True:
+            for config in cls._config['db']:
+                yield config
+
+    @classmethod
     def _setup_groups(cls):
         """
-        Setup group Config / Iterator(s).
+        Setup "group" Config / Iterator(s).
         
         - for each group, call _setup_connections(group_name)
         """
 
         for group in cls._config['groups']:
-            cls._config['groups'][group]['connection_iter'] = conn_iter_locked(
-                conn_iter(group)
-            )
+            cls._config['groups'][group]['connection_iter'] = conn_iter(group)
             cls._setup_connections(group)
 
     @classmethod
     def _setup_connections(cls, group):
-        """ Setup Connections per group.
+        """ Setup Connections per "group".
         
         :param str group: group name
 
@@ -158,8 +161,18 @@ class Connection(object):
         cls.logger.debug(cls._config)
 
     @classmethod
+    def get_threading_model(cls):
+        """ Return Threading Model / Type.
+
+        :return: threading model (threaded | non-threaded)
+        :rtype: string
+        """
+
+        return 'threaded' if 'type' not in cls._config else cls._config.get('type')
+
+    @classmethod
     def get_max_pool_size(cls, group):
-        """ Get Connection-Pool size by group name.
+        """ Get Connection-Pool Size by "group name".
         
         :param str group: group name
         :return: connection count
@@ -169,7 +182,7 @@ class Connection(object):
 
     @classmethod
     def get_connection_iter_container(cls, group):
-        """ Get Connection Iterator Container by group name.
+        """ Get Connection Iterator Container by "group name".
 
         :param str group: group name
         :return: connection iterator
@@ -191,13 +204,13 @@ class Connection(object):
     @classmethod
     def get_connection(cls, connection):
         """
-        Alias for get_connection_container().
+        Alias for "get_connection_container()".
         """
         return cls.get_connection_container(connection)
 
     @classmethod
     def get_connection_count(cls, connection):
-        """ Get Connection count by Connection.
+        """ Get Connection Count by Connection.
 
         :param tuple connection: (group name, group id)
         :return: connection count
@@ -214,30 +227,28 @@ class Connection(object):
 
     @classmethod
     def set_connection_status(cls, connection, status):
-        """ Set Connection status.
+        """ Set Connection Status.
 
         :param tuple connection: (group name, group id)
         :param str status: occupied | free.
         """
         assert status in ['occupied', 'free'], 'status must be free or occupied'
-        lock = threading.Lock()
-        with lock:
-            (group, id) = connection
-            connections = cls._config['groups'][group]['connections']
-            connection = connections[id]
-            new_connection = (connection[0], status)
-            # del(connections[id])
-            connections[id] = new_connection
-            cls.logger.debug('set status id:{} status:{} con_ref:{}'.format(
-                    id,
-                    status,
-                    new_connection[0]
-                )
+
+        (group, id) = connection
+        connections = cls._config['groups'][group]['connections']
+        connection_by_id = connections[id]
+        new_connection = (connection_by_id[0], status)
+        connections[id] = new_connection
+        cls.logger.debug('set status id:{} status:{} con_ref:{}'.format(
+                id,
+                status,
+                new_connection[0]
             )
+        )
 
     @classmethod
     def get_next_connection(cls, group):
-        """ Get Iterators next() Connection by group name.
+        """ Get Iterators next() Connection by "group name".
 
         :param str group: group name
         :return: connection object
@@ -259,37 +270,33 @@ class Connection(object):
 
         try:
 
-            lock = threading.Lock()
-
-            db_container = cls._config['db']
+            db_container = next(cls._dbiter_ref)
             group_container = cls._config['groups'][conn_group]
 
-            with lock:
+            group_container['connections'][conn_id] = (
+                psycopg2.connect(
+                    dbname = db_container['name'],
+                    user = db_container['user'],
+                    host = db_container['host'],
+                    password = db_container['pass'],
+                    sslmode = db_container['ssl'],
+                    connect_timeout = db_container['connect_timeout']
+                ),
+                'free'
+            )
 
-                group_container['connections'][conn_id] = (
-                    psycopg2.connect(
-                        dbname = db_container['name'],
-                        user = db_container['user'],
-                        host = db_container['host'],
-                        password = db_container['pass'],
-                        sslmode = db_container['ssl'],
-                        connect_timeout = db_container['connect_timeout']
-                    ),
-                    'free'
+            conn_container = group_container['connections'][conn_id]
+            connection = conn_container[0]
+
+            if 'autocommit' in group_container and group_container['autocommit'] is True:
+                extension = psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT
+                connection.set_isolation_level(extension)
+
+            if 'sqlprepare' in group_container and group_container['sqlprepare'] is True:
+                tmpCursor = connection.cursor(
+                    cursor_factory = psycopg2.extras.DictCursor
                 )
-
-                conn_container = group_container['connections'][conn_id]
-                connection = conn_container[0]
-
-                if 'autocommit' in group_container and group_container['autocommit'] is True:
-                    extension = psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT
-                    connection.set_isolation_level(extension)
-
-                if 'sqlprepare' in group_container and group_container['sqlprepare'] is True:
-                    tmpCursor = connection.cursor(
-                        cursor_factory = psycopg2.extras.DictCursor
-                    )
-                    tmpCursor.callproc('"SQLPrepare"."PrepareQueries"')
+                tmpCursor.callproc('"SQLPrepare"."PrepareQueries"')
 
         except Exception as e:
             raise DBConnectionError
@@ -326,7 +333,7 @@ class Query(object):
         :param str sql_params: SQL stored procedure parameters
         """
 
-        assert sql_params is not None, "sql_params must be given."
+        assert sql_params is not None, 'sql_params must be given.'
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
@@ -345,7 +352,7 @@ class Query(object):
 
     @staticmethod
     def execute(connection, sql_statement, sql_params=None):
-        """ Execute SQL query string.
+        """ Execute SQL Query String.
 
         :param tuple connection: (group name, group id)
         :param str sql_statement: SQL statement
@@ -364,7 +371,9 @@ class Query(object):
 
     @staticmethod
     def check_db(connection):
-        """ Check Database Connection is alive by sending simple now() request.
+        """ Check Database Connection.
+
+        Check Database Connection is alive by sending simple now() request.
 
         :param tuple connection: (group name, group id)
         """
@@ -401,11 +410,17 @@ class Handler(object):
         self.logger = logging.getLogger(__name__)
         self._group = group
 
+        threading_model = Connection.get_threading_model()
+        assert threading_model in ['threaded', 'non-threaded'], 'threading model must be threaded or non-threaded.'
+
         while True:
             try:
-                (self._conn_id, self.conn_ref) = Connection.get_next_connection(group)
-                self._connection = (self._group, self._conn_id)
-                self.logger.debug('handler connection:{}'.format(self._connection))
+                if threading_model == 'threaded':
+                    lock = threading.Lock()
+                    with lock:
+                        self._process()
+                else:
+                    self._process()
                 return
             except TypeError:
                 time.sleep(0.1)
@@ -423,15 +438,15 @@ class Handler(object):
         self._cleanup()
 
     def query(self, statement, params=None):
-        """
-        Query Wrapper Class.
+        """ Query Wrapper Class.
         """
 
         return Query.execute(self._connection, statement, params)
 
     def commit(self):
-        """
-        Manual commit() procedure used for autocommit=False connections
+        """ Commit Transaction.
+
+        Manual commit() procedure used for `autocommit=False` connections.
         """
         self.conn_ref.commit()
 
@@ -442,8 +457,18 @@ class Handler(object):
 
         return Query.execute_prepared(self._connection, params)
 
-    def _cleanup(self):
+    def _process(self):
         """
+        Process next() Connection.
+        """
+
+        (self._conn_id, self.conn_ref) = Connection.get_next_connection(self._group)
+        self._connection = (self._group, self._conn_id)
+        self.logger.debug('handler() connection:{}'.format(self._connection))
+
+    def _cleanup(self):
+        """ Cleanup Connection.
+
         Cleanup Connection (exit **with** block).
         
         - Try to commit() on no autocommit if still unfinished transaction(s)
