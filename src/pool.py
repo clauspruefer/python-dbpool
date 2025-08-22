@@ -464,7 +464,7 @@ class Handler(object):
 
         (self._conn_id, self.conn_ref) = Connection.get_next_connection(self._group)
         self._connection = (self._group, self._conn_id)
-        self.logger.debug('Handler() Connection:{}'.format(self._connection))
+        self.logger.debug('handler() connection:{}'.format(self._connection))
 
     def _cleanup(self):
         """ Cleanup Connection.
