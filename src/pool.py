@@ -1,13 +1,10 @@
 import os
 import time
 import json
-import copy
 import logging
 import threading
 
 import psycopg2
-
-from psycopg2 import extras
 
 
 class DBConnectionError(Exception):
@@ -153,11 +150,11 @@ class Connection(object):
         group_container['connections'] = []
         connection_container = group_container['connections']
 
-        for id in range(0, group_container['connection_count']):
+        for conn_id in range(0, group_container['connection_count']):
             connection_container.append(
                 (None, 'connecting')
             )
-            cls.connect((group, id))
+            cls.connect((group, conn_id))
         cls.logger.debug(cls._config)
 
     @classmethod
@@ -198,8 +195,8 @@ class Connection(object):
         :return: connection tuple (conn object ref, conn status)
         :rtype: tuple
         """
-        (group, id) = connection
-        return cls._config['groups'][group]['connections'][id]
+        (group, conn_id) = connection
+        return cls._config['groups'][group]['connections'][conn_id]
 
     @classmethod
     def get_connection(cls, connection):
@@ -218,7 +215,7 @@ class Connection(object):
         """
 
         connection_count = 0
-        (group, id) = connection
+        (group, group_id) = connection
         connections = cls._config['groups'][group]['connections']
         for (conn_ref, status) in connections:
             if status == 'occupied':
@@ -234,13 +231,13 @@ class Connection(object):
         """
         assert status in ['occupied', 'free'], 'status must be free or occupied'
 
-        (group, id) = connection
+        (group, group_id) = connection
         connections = cls._config['groups'][group]['connections']
-        connection_by_id = connections[id]
+        connection_by_id = connections[group_id]
         new_connection = (connection_by_id[0], status)
-        connections[id] = new_connection
-        cls.logger.debug('set status id:{} status:{} con_ref:{}'.format(
-                id,
+        connections[group_id] = new_connection
+        cls.logger.debug('set status group_id:{} status:{} con_ref:{}'.format(
+                group_id,
                 status,
                 new_connection[0]
             )
@@ -269,7 +266,6 @@ class Connection(object):
         (conn_group, conn_id) = connection
 
         try:
-
             db_container = next(cls._dbiter_ref)
             group_container = cls._config['groups'][conn_group]
 
@@ -298,7 +294,8 @@ class Connection(object):
                 )
                 tmpCursor.callproc('"SQLPrepare"."PrepareQueries"')
 
-        except Exception as e:
+        except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.InternalError) as e:
+            self.logger.debug('connection connect() exception:{}'.format(repr(e)))
             raise DBConnectionError
 
     @classmethod
@@ -312,9 +309,11 @@ class Connection(object):
         except DBOfflineError:
             for i in range(0, 10):
                 try:
+                    self.logger.debug('connection reconnect() try nr:{}'.format(i))
                     Connection.connect(connection)
                     return
-                except Exception as e:
+                except DBConnectionError as e:
+                    self.logger.debug('connection reconnect() exception:{}'.format(repr(e)))
                     time.sleep(cls._config['db']['connection_retry_sleep'])
 
 
@@ -337,13 +336,14 @@ class Query(object):
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
+        self.logger.debug('query execute_prepared() connection status:{}'.format(status))
 
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
             tmpCursor.callproc('"SQLPrepare"."ExecuteQuery"', sql_params)
             rec = tmpCursor.fetchone()
             return rec[0]
-        except Exception as e:
+        except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
             ErrorJSON = {}
             ErrorJSON['error'] = True
             ErrorJSON['exception'] = type(e).__name__
@@ -361,12 +361,14 @@ class Query(object):
 
         Connection.reconnect(connection)
         (conn_ref, status) = Connection.get_connection(connection)
+        self.logger.debug('query execute() connection status:{}'.format(status))
 
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
             tmpCursor.execute(sql_statement, sql_params)
             return tmpCursor
-        except Exception as e:
+        except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.ProgrammingError) as e:
+            self.logger.debug('query execute() exception:{}'.format(repr(e)))
             raise DBQueryError(repr(e))
 
     @staticmethod
@@ -378,11 +380,14 @@ class Query(object):
         :param tuple connection: (group name, group id)
         """
         (conn_ref, status) = Connection.get_connection(connection)
+        self.logger.debug('query check_db() connection status:{}'.format(status))
+
         try:
             tmpCursor = conn_ref.cursor(cursor_factory=psycopg2.extras.DictCursor)
             tmpCursor.execute("SELECT to_char(now(), 'HH:MI:SS') AS result")
-            rec = tmpCursor.fetchone()
-        except Exception as e:
+            tmpCursor.fetchone()
+        except (psycopg2.DatabaseError, psycopg2.OperationalError, psycopg2.InternalError) as e:
+            self.logger.debug('query check_db() exception:{}'.format(repr(e)))
             raise DBOfflineError
 
 
