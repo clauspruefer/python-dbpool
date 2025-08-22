@@ -160,9 +160,9 @@ effectively solving the GIL issue through the `non-threaded` configuration mode.
 
 The pool now supports multiple (read-load-balanced) PostgreSQL endpoints:
 
-✅ **Implemented**: Multiple database endpoint configuration
-✅ **Implemented**: Automatic connection distribution across endpoints
-✅ **Implemented**: Built-in load balancing for database connections
-✅ **Implemented**: Read / write / endpoint group separation
+- ✅ **Implemented**: Multiple database endpoint configuration
+- ✅ **Implemented**: Automatic connection distribution across endpoints
+- ✅ **Implemented**: Built-in load balancing for database connections
+- ✅ **Implemented**: Read / write / endpoint group separation
 
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/PyCQA/pylint)
