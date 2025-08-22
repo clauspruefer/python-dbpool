@@ -74,7 +74,7 @@ class TestFunctional:
         pool.Connection.init(connection_config)
 
         with pool.Handler('group1') as db:
-            r = db.query('SELECT * FROM test')
+            db.query('SELECT * FROM test')
 
     def test_handler_non_existing_group(self, monkeypatch, connection_config):
 
@@ -85,7 +85,7 @@ class TestFunctional:
         with pytest.raises(pool.UnconfiguredGroupError):
 
             with pool.Handler('group2') as db:
-                r = db.query('SELECT * FROM test')
+                db.query('SELECT * FROM test')
 
     def test_handler_connection_rotating(self, monkeypatch, connection_config):
 
@@ -105,43 +105,43 @@ class TestFunctional:
         db_comp10 = None
 
         with pool.Handler('group1') as db1:
-            r = db1.query('SELECT * FROM test')
+            db1.query('SELECT * FROM test')
             db_comp1 = db1
 
         with pool.Handler('group1') as db2:
-            r = db2.query('SELECT * FROM test')
+            db2.query('SELECT * FROM test')
             db_comp2 = db2
 
         with pool.Handler('group1') as db3:
-            r = db3.query('SELECT * FROM test')
+            db3.query('SELECT * FROM test')
             db_comp3 = db3
 
         with pool.Handler('group1') as db4:
-            r = db4.query('SELECT * FROM test')
+            db4.query('SELECT * FROM test')
             db_comp4 = db4
 
         with pool.Handler('group1') as db5:
-            r = db5.query('SELECT * FROM test')
+            db5.query('SELECT * FROM test')
             db_comp5 = db5
 
         with pool.Handler('group1') as db6:
-            r = db6.query('SELECT * FROM test')
+            db6.query('SELECT * FROM test')
             db_comp6 = db6
 
         with pool.Handler('group1') as db7:
-            r = db7.query('SELECT * FROM test')
+            db7.query('SELECT * FROM test')
             db_comp7 = db7
 
         with pool.Handler('group1') as db8:
-            r = db8.query('SELECT * FROM test')
+            db8.query('SELECT * FROM test')
             db_comp8 = db8
 
         with pool.Handler('group1') as db9:
-            r = db9.query('SELECT * FROM test')
+            db9.query('SELECT * FROM test')
             db_comp9 = db9
 
         with pool.Handler('group1') as db10:
-            r = db10.query('SELECT * FROM test')
+            db10.query('SELECT * FROM test')
             db_comp10 = db10
 
         assert db_comp1.conn_ref == db_comp6.conn_ref
@@ -162,7 +162,7 @@ class TestThreading:
 
             def run(self):
                 with pool.Handler('group1') as db:
-                    r = db.query('SELECT * FROM test1')
+                    db.query('SELECT * FROM test1')
                     time.sleep(3)
 
         class ThreadNonBlocking(threading.Thread):
@@ -172,7 +172,7 @@ class TestThreading:
 
             def run(self):
                 with pool.Handler('group1') as db:
-                    r = db.query('SELECT * FROM test2')
+                    db.query('SELECT * FROM test2')
                     time.sleep(0.5)
 
         monkeypatch.setattr(psycopg2, 'connect', patched_connect)
