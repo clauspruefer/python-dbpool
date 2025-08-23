@@ -7,9 +7,6 @@
 - **Multi-Database Support**: Added support for multiple database endpoints with automatic load balancing
   - Configure multiple database hosts in configuration
   - Connections automatically distributed across available endpoints
-  - Built-in load balancing for read operations
-  - Read/write/endpoint group separation
-  - Enhanced fault tolerance and scalability
 
 - **Threading Models**: Support for both threaded and non-threaded deployment scenarios
   - `threaded` mode (default): Thread-safe connection handling with locks for traditional multi-threaded web servers
