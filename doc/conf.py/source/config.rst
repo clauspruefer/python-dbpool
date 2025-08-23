@@ -19,15 +19,15 @@ The root configuration dictionary must contain:
 
     config = {
         'db': {
-            # Single database configuration
+            # single database configuration
         },
-        # OR for multiple databases:
+        # or for multiple databases:
         # 'db': [
-        #     { # Database 1 config },
-        #     { # Database 2 config }
+        #     { # database 1 config },
+        #     { # database 2 config }
         # ],
         'groups': {
-            # Connection groups
+            # connection groups
         },
         'type': 'threaded'  # optional, defaults to 'threaded'
     }

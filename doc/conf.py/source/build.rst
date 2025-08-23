@@ -15,12 +15,12 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Create virtual environment
+    # create virtual environment
     python3 -m venv pgdbpool-dev
     source pgdbpool-dev/bin/activate  # Linux/macOS
     # pgdbpool-dev\Scripts\activate   # Windows
 
-    # Upgrade pip
+    # upgrade pip
     pip install --upgrade pip
 
 2. Source Code Acquisition
@@ -37,7 +37,7 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Download latest release
+    # download latest release
     wget https://github.com/clauspruefer/python-dbpool/archive/refs/tags/v1.0rc1.tar.gz
     tar -xzf v1.0rc1.tar.gz
     cd python-dbpool-1.0rc1
@@ -49,10 +49,10 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Install PostgreSQL adapter
+    # install postgresql adapter
     pip install psycopg2-binary
     
-    # Or compile from source (requires libpq-dev)
+    # or compile from source (requires libpq-dev)
     # apt-get install libpq-dev  # Debian/Ubuntu
     # pip install psycopg2
 
@@ -60,10 +60,10 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Install testing framework
+    # install testing framework
     pip install pytest pytest-cov
     
-    # Install documentation tools (optional)
+    # install documentation tools (optional)
     pip install sphinx sphinx-rtd-theme
 
 4. Build Distribution Package
@@ -73,11 +73,11 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Modern way using build
+    # modern way using build
     pip install build
     python -m build --sdist
 
-    # Legacy way using setuptools
+    # legacy way using setuptools
     python setup.py sdist
 
 **Create Wheel Distribution:**
@@ -93,24 +93,24 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Install in development mode
+    # install in development mode
     pip install -e .
 
 **Local Package Installation:**
 
 .. code-block:: bash
 
-    # Install from built package
+    # install from built package
     pip install dist/pgdbpool-1.0rc1.tar.gz
 
 **System-wide Installation:**
 
 .. code-block:: bash
 
-    # Install system-wide (requires sudo)
+    # install system-wide (requires sudo)
     sudo pip install dist/pgdbpool-1.0rc1.tar.gz
     
-    # For restrictive systems
+    # for restrictive systems
     sudo pip install dist/pgdbpool-1.0rc1.tar.gz --break-system-packages
 
 6. Testing
@@ -120,13 +120,13 @@ Python PEP 405 virtual environments provide isolated development environments:
 
 .. code-block:: bash
 
-    # Run all tests
+    # run all tests
     pytest
     
-    # Run with coverage report
+    # run with coverage report
     pytest --cov=pgdbpool --cov-report=html
     
-    # Run specific test file
+    # run specific test file
     pytest test/unit/test_pool.py
 
 **Test Configuration:**
@@ -154,6 +154,6 @@ Tests require a PostgreSQL database. Set environment variables:
 
 .. code-block:: bash
 
-    # Open in browser
+    # open in browser
     open build/html/index.html  # macOS
     xdg-open build/html/index.html  # Linux

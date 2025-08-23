@@ -18,23 +18,23 @@ Basic configuration for a single PostgreSQL database:
 
 .. code-block:: python
 
-    # File: DBConfig.py
+    # file: DBConfig.py
     import os
 
-    # Database configuration
+    # database configuration
     DB_NAME = 'myapp_db'
     DB_USER = 'myapp_user'
     DB_HOST = 'localhost'
     DB_PASS = os.environ['PSQL_PASSWORD']
 
     config = {
-        'type': 'threaded',  # Threading model
+        'type': 'threaded',  # threading model
         'db': {
             'host': DB_HOST,
             'name': DB_NAME,
             'user': DB_USER,
             'pass': DB_PASS,
-            'ssl': 'prefer',  # Use SSL when possible
+            'ssl': 'prefer',  # use ssl when possible
             'connect_timeout': 30,
             'connection_retry_sleep': 1,
             'query_timeout': 30000,
@@ -59,11 +59,11 @@ Example WSGI application using pgdbpool:
 
 .. code-block:: python
 
-    # File: app.py
+    # file: app.py
     import DBConfig
     from pgdbpool import pool as dbpool
 
-    # Initialize connection pool
+    # initialize connection pool
     dbpool.Connection.init(DBConfig.config)
 
     def application(environ, start_response):
@@ -75,7 +75,7 @@ Example WSGI application using pgdbpool:
                     ('Content-Type', 'application/json; charset=UTF-8')
                 ])
 
-                # Simple query with autocommit
+                # simple query with autocommit
                 sql = "SELECT id, name, email FROM users WHERE active = true"
                 
                 with dbpool.Handler('default') as db:
@@ -103,7 +103,7 @@ Configure multiple database endpoints for high availability:
 
 .. code-block:: python
 
-    # File: MultiDBConfig.py
+    # file: MultiDBConfig.py
     import os
 
     config = {
@@ -151,7 +151,7 @@ Example showing manual transaction control with commit():
 
     from pgdbpool import pool as dbpool
     
-    # Initialize with multi-DB config
+    # initialize with multi-DB config
     dbpool.Connection.init(MultiDBConfig.config)
     
     def transfer_funds(from_account, to_account, amount):
@@ -159,32 +159,32 @@ Example showing manual transaction control with commit():
         
         try:
             with dbpool.Handler('write_pool') as db:
-                # Start transaction (autocommit=False for write_pool)
+                # start transaction (autocommit=False for write_pool)
                 
-                # Debit from source account
+                # debit from source account
                 db.query(
                     "UPDATE accounts SET balance = balance - %s WHERE id = %s",
                     (amount, from_account)
                 )
                 
-                # Credit to destination account  
+                # credit to destination account  
                 db.query(
                     "UPDATE accounts SET balance = balance + %s WHERE id = %s", 
                     (amount, to_account)
                 )
                 
-                # Log the transaction
+                # log the transaction
                 db.query(
                     "INSERT INTO transaction_log (from_id, to_id, amount) VALUES (%s, %s, %s)",
                     (from_account, to_account, amount)
                 )
                 
-                # Commit transaction
+                # commit transaction
                 db.commit()
                 return True
                 
         except Exception as e:
-            # Transaction will be automatically rolled back
+            # transaction will be automatically rolled back
             print(f"Transaction failed: {e}")
             return False
 
@@ -195,9 +195,9 @@ Configuration for process-based web servers (e.g., Gunicorn with workers):
 
 .. code-block:: python
 
-    # File: ProcessConfig.py
+    # file: ProcessConfig.py
     config = {
-        'type': 'non-threaded',  # Removes locking overhead
+        'type': 'non-threaded',  # removes locking overhead
         'db': {
             'host': 'localhost',
             'name': 'myapp',
@@ -207,7 +207,7 @@ Configuration for process-based web servers (e.g., Gunicorn with workers):
         },
         'groups': {
             'worker_pool': {
-                'connection_count': 5,  # Fewer connections per process
+                'connection_count': 5,  # fewer connections per process
                 'autocommit': True
             }
         }
