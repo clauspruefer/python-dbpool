@@ -33,7 +33,7 @@ The connection pool now supports **multiple PostgreSQL database endpoints** for 
 
 - ✅ Configure multiple database hosts in the configuration
 - ✅ Connections are automatically distributed across available endpoints
-- ✅ rovides built-in load balancing for read operations
+- ✅ Provides built-in load balancing for read operations
 - ✅ Enhances fault tolerance and scalability
 
 ### 2.2. Concept / Simplicity
