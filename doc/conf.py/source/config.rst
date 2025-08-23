@@ -4,29 +4,40 @@
 Configuration
 =============
 
-Basic configuration explanation. See :ref:`examples-label` subsection for more detailed information
-(working Apache WSGI Script).
+Configuration guide for pgdbpool. See :ref:`examples-label` for detailed working examples (including Apache WSGI scripts).
 
-1. Root Dict 
-============
+1. Root Configuration Structure
+===============================
 
-The root dictionary must contain keys `db` for **Database Connection Config** (see ) and `groups`
-for **Group Config** (see ) .
+The root configuration dictionary must contain:
+
+- ``db``: Database connection configuration (dict or list of dicts for multi-DB support)
+- ``groups``: Connection group configuration  
+- ``type`` (optional): Threading model specification (``threaded`` or ``non-threaded``)
 
 .. code-block:: python
 
     config = {
         'db': {
+            # Single database configuration
         },
+        # OR for multiple databases:
+        # 'db': [
+        #     { # Database 1 config },
+        #     { # Database 2 config }
+        # ],
         'groups': {
-        }
+            # Connection groups
+        },
+        'type': 'threaded'  # optional, defaults to 'threaded'
     }
 
-2. Database Connection 
-======================
+2. Database Connection Configuration
+====================================
 
-The Database Connection Configuration JSON schema. It consists of base configuration properties
-and the "groups" dictionary to specify (multiple) group data.
+The database connection configuration supports both single and multiple database endpoints.
+
+**Single Database Configuration:**
 
 .. code-block:: python
 
@@ -42,9 +53,59 @@ and the "groups" dictionary to specify (multiple) group data.
             'query_timeout': 120,
             'session_tmp_buffer': 128
         }
+    }
+
+**Multiple Database Configuration (Load Balancing):**
+
+.. code-block:: python
+
+    config = {
+        'db': [
+            {
+                'host': 'db1.example.com',
+                'name': 'dbname',
+                'user': 'username',
+                'pass': 'userpass',
+                'ssl': False,
+                'connect_timeout': 30,
+                'connection_retry_sleep': 1,
+                'query_timeout': 120,
+                'session_tmp_buffer': 128
+            },
+            {
+                'host': 'db2.example.com',
+                'name': 'dbname',
+                'user': 'username',
+                'pass': 'userpass',
+                'ssl': False,
+                'connect_timeout': 30,
+                'connection_retry_sleep': 1,
+                'query_timeout': 120,
+                'session_tmp_buffer': 128
+            }
+        ]
+    }
 
 
-3. Database Connection Properties
+3. Threading Model Configuration
+==================================
+
+The threading model can be configured to optimize for different deployment scenarios:
+
+.. code-block:: python
+
+    config = {
+        'type': 'threaded',  # or 'non-threaded'
+        'db': { ... },
+        'groups': { ... }
+    }
+
+**Threading Models:**
+
+- ``threaded`` (default): Uses thread-safe connection handling with locks. Optimal for threaded web servers (Apache, Gunicorn with threads).
+- ``non-threaded``: Removes locking overhead. Optimal for process-based servers (Gunicorn with workers) or single-threaded applications.
+
+4. Database Connection Properties
 =================================
 
 .. list-table:: Database Connection Properties
@@ -74,13 +135,13 @@ and the "groups" dictionary to specify (multiple) group data.
      - 
      - 
      - 
-     - Database Auth Usern
+     - Database Auth Username
    * - pass
      - string
      - 
      - 
      - 
-     - Database Auth Pass
+     - Database Auth Password
    * - ssl
      - bool
      - 
@@ -112,7 +173,7 @@ and the "groups" dictionary to specify (multiple) group data.
      - 128
      - Session Buffer Memory
 
-4. Group Configuration
+5. Group Configuration
 ======================
 
 .. code-block:: python
@@ -129,7 +190,7 @@ and the "groups" dictionary to specify (multiple) group data.
         }
 
 
-5. Group Configuration Properties
+6. Group Configuration Properties
 =================================
 
 .. list-table:: Group Properties
@@ -155,11 +216,10 @@ and the "groups" dictionary to specify (multiple) group data.
      - True
      - Autocommit on / off
 
-6. Internal Default (Values)
+7. Internal Default Values
 ============================
 
-The following schema represensts the internal Python structures. Some values (e.g. groups.id.connections)
-are used to internally store values and should not be overwritten.
+The following schema represents the internal Python structures. Some values (e.g., ``groups.id.connections``) are used internally and should not be modified manually.
 
 .. code-block:: python
 
@@ -187,10 +247,10 @@ are used to internally store values and should not be overwritten.
         }
     }
 
-7. Multi Group Example
+8. Multi-Group Configuration Example
 ======================
 
-To specify a) autocommit and b) non autocommit database connection to the same endpoint.
+Example configuration with separate groups for autocommit and non-autocommit connections to the same database endpoint:
 
 .. code-block:: python
 
@@ -208,6 +268,47 @@ To specify a) autocommit and b) non autocommit database connection to the same e
             },
             'group2': {
                 'connection_count': 30,
+                'autocommit': False
+            }
+        }
+    }
+
+9. Multi-Database Load Balancing Example
+=========================================
+
+Configure multiple database endpoints for automatic load balancing and failover:
+
+.. code-block:: python
+
+    config = {
+        'type': 'threaded',
+        'db': [
+            {
+                'host': 'primary-db.example.com',
+                'name': 'myapp',
+                'user': 'appuser',
+                'pass': 'securepassword',
+                'ssl': 'require',
+                'connect_timeout': 30,
+                'query_timeout': 120
+            },
+            {
+                'host': 'secondary-db.example.com',
+                'name': 'myapp',
+                'user': 'appuser', 
+                'pass': 'securepassword',
+                'ssl': 'require',
+                'connect_timeout': 30,
+                'query_timeout': 120
+            }
+        ],
+        'groups': {
+            'read_write': {
+                'connection_count': 20,
+                'autocommit': True
+            },
+            'transactions': {
+                'connection_count': 10,
                 'autocommit': False
             }
         }

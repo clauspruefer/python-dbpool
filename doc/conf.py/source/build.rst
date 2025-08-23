@@ -1,47 +1,159 @@
 .. build
 
-============
-Build Module
-============
+=================
+Building pgdbpool
+=================
 
-1. Consider Using Environment
-=============================
+Guide for building pgdbpool from source code.
 
-Python PEP 405 proposes Virtual Environments. Think about using.
+1. Development Environment Setup
+================================
 
-2. Clone Repository
-===================
+**Virtual Environment (Recommended)**
+
+Python PEP 405 virtual environments provide isolated development environments:
+
+.. code-block:: bash
+
+    # Create virtual environment
+    python3 -m venv pgdbpool-dev
+    source pgdbpool-dev/bin/activate  # Linux/macOS
+    # pgdbpool-dev\Scripts\activate   # Windows
+
+    # Upgrade pip
+    pip install --upgrade pip
+
+2. Source Code Acquisition
+===========================
+
+**Clone from GitHub:**
 
 .. code-block:: bash
 
     git clone https://github.com/clauspruefer/python-dbpool.git
     cd python-dbpool
 
-3. Build As Non Root User
-=========================
+**Download Release Archive:**
 
 .. code-block:: bash
 
-    python3 setup.py sdist
+    # Download latest release
+    wget https://github.com/clauspruefer/python-dbpool/archive/refs/tags/v1.0rc1.tar.gz
+    tar -xzf v1.0rc1.tar.gz
+    cd python-dbpool-1.0rc1
 
-4. Install As Root User
+3. Install Dependencies
 =======================
 
-.. code-block:: bash
-
-    sudo pip3 install ./dist/package-0.1.tar.gz
-
-or global on restrictive PIP package manager systems ...
+**Runtime Dependencies:**
 
 .. code-block:: bash
 
-    sudo pip3 install ./dist/package-0.1.tar.gz --break-system-packages
+    # Install PostgreSQL adapter
+    pip install psycopg2-binary
+    
+    # Or compile from source (requires libpq-dev)
+    # apt-get install libpq-dev  # Debian/Ubuntu
+    # pip install psycopg2
 
-5. Run Tests
-============
-
-To ensure everything works correctly, run tests (after module installation).
+**Development Dependencies:**
 
 .. code-block:: bash
 
+    # Install testing framework
+    pip install pytest pytest-cov
+    
+    # Install documentation tools (optional)
+    pip install sphinx sphinx-rtd-theme
+
+4. Build Distribution Package
+=============================
+
+**Create Source Distribution:**
+
+.. code-block:: bash
+
+    # Modern way using build
+    pip install build
+    python -m build --sdist
+
+    # Legacy way using setuptools
+    python setup.py sdist
+
+**Create Wheel Distribution:**
+
+.. code-block:: bash
+
+    python -m build --wheel
+
+5. Installation Methods
+=======================
+
+**Development Installation (Editable):**
+
+.. code-block:: bash
+
+    # Install in development mode
+    pip install -e .
+
+**Local Package Installation:**
+
+.. code-block:: bash
+
+    # Install from built package
+    pip install dist/pgdbpool-1.0rc1.tar.gz
+
+**System-wide Installation:**
+
+.. code-block:: bash
+
+    # Install system-wide (requires sudo)
+    sudo pip install dist/pgdbpool-1.0rc1.tar.gz
+    
+    # For restrictive systems
+    sudo pip install dist/pgdbpool-1.0rc1.tar.gz --break-system-packages
+
+6. Testing
+==========
+
+**Run Test Suite:**
+
+.. code-block:: bash
+
+    # Run all tests
     pytest
+    
+    # Run with coverage report
+    pytest --cov=pgdbpool --cov-report=html
+    
+    # Run specific test file
+    pytest test/unit/test_pool.py
+
+**Test Configuration:**
+
+Tests require a PostgreSQL database. Set environment variables:
+
+.. code-block:: bash
+
+    export PSQL_PWD="your_test_db_password"
+    export TEST_DB_HOST="localhost"
+    export TEST_DB_NAME="test_database"
+    export TEST_DB_USER="test_user"
+
+7. Documentation Building
+=========================
+
+**Build HTML Documentation:**
+
+.. code-block:: bash
+
+    cd doc/conf.py
+    sphinx-build -b html source build/html
+
+**View Documentation:**
+
+.. code-block:: bash
+
+    # Open in browser
+    open build/html/index.html  # macOS
+    xdg-open build/html/index.html  # Linux

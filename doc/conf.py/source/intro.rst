@@ -4,7 +4,7 @@
 Intro / Module Description
 ==========================
 
-The **pgdbpool** Python Module is a tiny PostgreSQL Database Connection De-Multiplexer primarily scoped for Web- / Application Server.
+The **pgdbpool** Python Module is a lightweight PostgreSQL Database Connection Pool and Load Balancer primarily designed for Web and Application Servers.
 
 1. Basic Install
 ================
@@ -26,7 +26,7 @@ The **pgdbpool** Python Module is a tiny PostgreSQL Database Connection De-Multi
 3. Build Dependencies
 =====================
 
-On current Debian 12 / Ubuntu 22.04.3, 24.04.1 install the following additional packages (Documentation Rendering & Testing).
+On current Debian 12 / Ubuntu 22.04+ / Ubuntu 24.04+ install the following additional packages for documentation rendering and testing:
 
 .. code-block:: bash
 
@@ -49,11 +49,17 @@ To run all tests (unit and integration) after pip package installation.
 5. Current Features
 ===================
 
-- Connection Pooling in (threaded) Web-Server Environment (Single Destination DB-Node)
-- Automatic DB Reconnection
-- PostgreSQL Prepared Queries Module
+- **Multi-Database Support**: Connection pooling with multiple database endpoints for load balancing
+- **Threading Models**: Support for both threaded and non-threaded environments
+- **Connection Pooling**: Efficient connection pooling in Web-Server environments
+- **Automatic Reconnection**: Automatic database reconnection on connection failures  
+- **PostgreSQL Prepared Queries**: Support for prepared SQL statements
+- **Transaction Control**: Manual commit() procedure for non-autocommit connections
 
-6. Planned Features
-===================
+6. Architecture Benefits
+========================
 
-- Connection Load Balancing to multiple (auto-scaled) Database Nodes
+- **Scalability**: Distributes connections across multiple database nodes
+- **Reliability**: Automatic failover and reconnection capabilities
+- **Performance**: Optimized connection reuse and reduced overhead
+- **Flexibility**: Configurable for different deployment scenarios
