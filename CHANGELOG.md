@@ -20,11 +20,6 @@
 
 ### Architecture & Performance
 
-- **Improved Architecture**: Enhanced connection handling and pool management
-  - Automatic failover and reconnection capabilities
-  - Connection health monitoring with SQL ping verification
-  - Efficient connection reuse and reduced overhead
-  - Flexible deployment configuration options
 
 - **Configuration Enhancements**: 
   - Threading model configuration
