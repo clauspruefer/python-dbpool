@@ -9,7 +9,7 @@ This document provides instructions for building the Sphinx documentation for th
 Install the required Sphinx packages for HTML documentation generation:
 
 ```bash
-# Install Sphinx and Read the Docs theme
+# install sphinx and read the docs theme
 apt-get install python3-sphinx python3-sphinx-rtd-theme
 ```
 
@@ -18,7 +18,7 @@ apt-get install python3-sphinx python3-sphinx-rtd-theme
 Install LaTeX packages for PDF documentation generation:
 
 ```bash
-# Install complete LaTeX distribution for PDF generation
+# install complete latex distribution for pdf generation
 apt-get install texlive-full
 ```
 
@@ -29,10 +29,10 @@ apt-get install texlive-full
 Build HTML documentation and navigate to the output directory:
 
 ```bash
-# Generate HTML documentation
+# generate html documentation
 make html
 
-# Navigate to the generated HTML files
+# navigate to the generated html files
 cd ./build/html/
 ```
 
@@ -41,9 +41,9 @@ cd ./build/html/
 Build PDF documentation and navigate to the output directory:
 
 ```bash
-# Generate PDF documentation using LaTeX
+# generate pdf documentation using latex
 make latexpdf
 
-# Navigate to the generated PDF files
+# navigate to the generated pdf files
 cd ./build/latex/
 ```
