@@ -31,10 +31,10 @@ The **pgdbpool** Python module is a tiny **PostgreSQL Database Connection De-Mul
 
 The connection pool now supports **multiple PostgreSQL database endpoints** for load balancing and high availability:
 
-- Configure multiple database hosts in the configuration
-- Connections are automatically distributed across available endpoints
-- Provides built-in load balancing for read operations
-- Enhances fault tolerance and scalability
+- ✅ Configure multiple database hosts in the configuration
+- ✅ Connections are automatically distributed across available endpoints
+- ✅ Provides built-in load balancing for read operations
+- ✅ Enhances fault tolerance and scalability
 
 ### 2.2. Concept / Simplicity
 
@@ -117,14 +117,14 @@ config = {
 ### 5.2. Threading Model Configuration
 
 ```python
-# For non-threaded applications (e.g., FalconAS)
+# for non-threaded applications (e.g., FalconAS)
 config = {
     'type': 'non-threaded',
     'db': { ... },
     'groups': { ... }
 }
 
-# For traditional threaded applications (default)
+# for traditional threaded applications (default)
 config = {
     'type': 'threaded',  # or omit for default
     'db': { ... },
@@ -139,7 +139,7 @@ import pgdbpool as dbpool
 
 dbpool.Connection.init(config)
 
-# For autocommit=False connections
+# for autocommit=False connections
 with dbpool.Handler('group1') as db:
     db.query('INSERT INTO table1 VALUES (%s)', ('value1',))
     db.query('INSERT INTO table2 VALUES (%s)', ('value2',))
