@@ -44,7 +44,6 @@
 - **API Improvements**: Better error handling and connection management
   - Enhanced exception handling with specific error classes
   - Improved connection iteration and management
-  - Better transaction control for autocommit scenarios
 
 ## Version 0.99
 
