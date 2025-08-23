@@ -29,6 +29,9 @@ apt-get install texlive-full
 Build HTML documentation and navigate to the output directory:
 
 ```bash
+# change to build root
+cd ./conf.py
+
 # generate html documentation
 make html
 

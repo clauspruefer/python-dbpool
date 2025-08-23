@@ -16,7 +16,6 @@ pgdbpool is a lightweight Python module that provides efficient connection pooli
 - Both threaded and non-threaded deployment models
 - Automatic reconnection and failover capabilities
 - Transaction control with manual commit support
-- High-performance connection pooling
 
 **Quick Start:**
 
@@ -25,8 +24,12 @@ pgdbpool is a lightweight Python module that provides efficient connection pooli
     from pgdbpool import pool as dbpool
     
     config = {
-        'db': {'host': 'localhost', 'name': 'mydb', 'user': 'user', 'pass': 'pass'},
-        'groups': {'default': {'connection_count': 10, 'autocommit': True}}
+        'db':
+        [
+         {'host': 'mypostgres-1', 'name': 'mydb', 'user': 'user', 'pass': 'pass'},
+         {'host': 'mypostgres-2', 'name': 'mydb', 'user': 'user', 'pass': 'pass'}
+        ],
+        'groups': {'default': {'connection_count': 2, 'autocommit': True}}
     }
     
     dbpool.Connection.init(config)
