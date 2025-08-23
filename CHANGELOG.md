@@ -39,9 +39,7 @@
 
 - **Documentation**: Complete rewrite of documentation to reflect new features
   - Comprehensive Sphinx-based documentation
-  - Architecture design documentation
   - Configuration guides and examples
-  - Build and deployment instructions
 
 - **API Improvements**: Better error handling and connection management
   - Enhanced exception handling with specific error classes
