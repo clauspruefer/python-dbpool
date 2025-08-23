@@ -39,12 +39,13 @@ On current Debian 12 / Ubuntu 22.04+ / Ubuntu 24.04+ install the following addit
 4. Tests
 ========
 
-To run all tests (unit and integration) after pip package installation.
+To run all tests (unit and integration) after pip package installation
+(warnings treated as errors and debug level set to INFO).
 
 .. code-block:: bash
 
     # run pytest
-    cd ./ && pytest
+    cd ./ && pytest.sh
 
 5. Current Features
 ===================

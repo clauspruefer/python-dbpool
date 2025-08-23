@@ -84,7 +84,7 @@ pip install pgdbpool
 
 ## 5. Documentation / Examples
 
-See documentation either at `./doc` or [https://pythondocs.webcodex.de/pgdbpool](https://pythondocs.webcodex.de/pgdbpool)
+See documentation either at `./doc` or [https://pythondocs.webcodex.de/pgdbpool/v1.0](https://pythondocs.webcodex.de/pgdbpool/v1.0)
 for detailed explanation / illustrative examples.
 
 ### 5.1. Multiple Database Configuration
