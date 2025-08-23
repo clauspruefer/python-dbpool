@@ -20,7 +20,6 @@
 
 ### Architecture & Performance
 
-
 - **Configuration Enhancements**: 
   - Threading model configuration
 
@@ -33,6 +32,7 @@
 - **API Improvements**: Better error handling and connection management
   - Enhanced exception handling with specific error classes
   - Improved connection iteration and management
+  - Improved threading-model stability / thread locking
 
 ## Version 0.99
 
