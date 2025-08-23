@@ -26,3 +26,16 @@ __pycache__
 .swp
 *.*~
 *.egg-info
+
+# Virtual environments
+pgdbpool-dev/
+venv/
+env/
+ENV/
+
+# Test coverage
+.coverage
+htmlcov/
+
+# Temporary symlinks
+pgdbpool
