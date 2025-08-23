@@ -1,22 +1,62 @@
-.. python-xml-microparser documentation master file, created by
+.. pgdbpool documentation master file, created by
    sphinx-quickstart on Tue Feb  6 08:37:14 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Python Module "pgdbpool" Documentation
-======================================
+pgdbpool Documentation
+======================
 
-Contents:
+PostgreSQL Database Connection Pool and Load Balancer
+
+pgdbpool is a lightweight Python module that provides efficient connection pooling and load balancing for PostgreSQL databases, designed for web and application servers.
+
+**Key Features:**
+
+- Multi-database endpoint support with automatic load balancing
+- Both threaded and non-threaded deployment models
+- Automatic reconnection and failover capabilities
+- Transaction control with manual commit support
+- High-performance connection pooling
+
+**Quick Start:**
+
+.. code-block:: python
+
+    from pgdbpool import pool as dbpool
+    
+    config = {
+        'db': {'host': 'localhost', 'name': 'mydb', 'user': 'user', 'pass': 'pass'},
+        'groups': {'default': {'connection_count': 10, 'autocommit': True}}
+    }
+    
+    dbpool.Connection.init(config)
+    
+    with dbpool.Handler('default') as db:
+        results = db.query("SELECT * FROM users")
+
+Documentation Contents
+======================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
+   :caption: Getting Started
 
    intro
-   design
    build
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Configuration & Usage
+
    config
-   api
    examples
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Advanced Topics
+
+   design
+   api
 
 Indices and tables
 ==================

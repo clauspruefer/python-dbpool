@@ -207,7 +207,7 @@ The threading model can be configured to optimize for different deployment scena
      - int
      - Quantity
      - 
-     -
+     - Required
      - Connection Count
    * - autocommit
      - bool
