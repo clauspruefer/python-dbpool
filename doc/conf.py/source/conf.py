@@ -7,10 +7,10 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Python pgdbpool'
-copyright = '2018 - 2024, Claus Prüfer'
+copyright = '2018 - 2025, Claus Prüfer'
 author = 'Claus Prüfer'
-version = '0.98'
-release = '0.98rc1'
+version = '1.0'
+release = '1.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

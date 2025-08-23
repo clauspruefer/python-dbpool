@@ -88,7 +88,7 @@ The database connection configuration supports both single and multiple database
 
 
 3. Threading Model Configuration
-==================================
+================================
 
 The threading model can be configured to optimize for different deployment scenarios:
 
@@ -248,7 +248,7 @@ The following schema represents the internal Python structures. Some values (e.g
     }
 
 8. Multi-Group Configuration Example
-======================
+====================================
 
 Example configuration with separate groups for autocommit and non-autocommit connections to the same database endpoint:
 
