@@ -30,10 +30,7 @@
   - Flexible deployment configuration options
 
 - **Configuration Enhancements**: 
-  - Group-based connection configuration
-  - Database connection property management
   - Threading model configuration
-  - Session buffer and timeout controls
 
 ### Documentation & Development
 
