@@ -6,6 +6,8 @@ import threading
 
 from pgdbpool import pool
 
+logger = logging.getLogger(__name__)
+
 
 class DBCursorPatch(object):
 
@@ -104,9 +106,20 @@ def connection_config_multi():
     return config
 
 
-class TestMultiDB:
+class TestConnectionMultiDB:
 
-    def test_base_iteration(self, monkeypatch, connection_config_multi, caplog):
+    def test_connection_setup(self, monkeypatch, connection_config_multi, caplog):
+
+        caplog.set_level(logging.DEBUG)
+
+        monkeypatch.setattr(psycopg2, 'connect', patched_connect)
+
+        pool.Connection.init(connection_config_multi)
+
+        assert "'host': '127.0.0.1'" in caplog.messages[0]
+        assert "'host': '127.0.0.2'" in caplog.messages[1]
+
+    def test_connection_iteration(self, monkeypatch, connection_config_multi, caplog):
 
         caplog.set_level(logging.DEBUG)
 
@@ -125,3 +138,80 @@ class TestMultiDB:
 
         with pool.Handler('group1') as db:
             db.query('sql4')
+
+        with pool.Handler('group1') as db:
+            db.query('sql5')
+
+        with pool.Handler('group1') as db:
+            db.query('sql6')
+
+        assert "group:group1 id:0" in caplog.messages[4]
+        assert "group:group1 id:1" in caplog.messages[12]
+        assert "group:group1 id:0" in caplog.messages[20]
+        assert "group:group1 id:1" in caplog.messages[28]
+        assert "group:group1 id:0" in caplog.messages[36]
+        assert "group:group1 id:1" in caplog.messages[44]
+
+
+class TestConnectionSingleDB:
+
+    def test_connection_conn_count(self, monkeypatch, connection_config_single, caplog):
+
+        caplog.set_level(logging.DEBUG)
+
+        monkeypatch.setattr(psycopg2, 'connect', patched_connect)
+
+        pool.Connection.init(connection_config_single)
+
+        assert "'host': '127.0.0.1'" in caplog.messages[0]
+        assert "'host': '127.0.0.1'" in caplog.messages[1]
+        assert "'host': '127.0.0.1'" in caplog.messages[2]
+        assert "'host': '127.0.0.1'" in caplog.messages[3]
+        assert "'host': '127.0.0.1'" in caplog.messages[4]
+
+        with pool.Handler('group1') as db:
+            db.query('sql1')
+
+        with pool.Handler('group1') as db:
+            db.query('sql2')
+
+        with pool.Handler('group1') as db:
+            db.query('sql3')
+
+        with pool.Handler('group1') as db:
+            db.query('sql4')
+
+        with pool.Handler('group1') as db:
+            db.query('sql5')
+
+        with pool.Handler('group1') as db:
+            db.query('sql6')
+
+        with pool.Handler('group1') as db:
+            db.query('sql7')
+
+        with pool.Handler('group1') as db:
+            db.query('sql8')
+
+        with pool.Handler('group1') as db:
+            db.query('sql9')
+
+        with pool.Handler('group1') as db:
+            db.query('sql10')
+
+        with pool.Handler('group1') as db:
+            db.query('sql11')
+
+        assert "group:group1 id:0" in caplog.messages[7]
+        assert "group:group1 id:1" in caplog.messages[15]
+        assert "group:group1 id:2" in caplog.messages[23]
+        assert "group:group1 id:3" in caplog.messages[31]
+        assert "group:group1 id:4" in caplog.messages[39]
+
+        assert "group:group1 id:0" in caplog.messages[47]
+        assert "group:group1 id:1" in caplog.messages[55]
+        assert "group:group1 id:2" in caplog.messages[63]
+        assert "group:group1 id:3" in caplog.messages[71]
+        assert "group:group1 id:4" in caplog.messages[79]
+
+        assert "group:group1 id:0" in caplog.messages[87]
