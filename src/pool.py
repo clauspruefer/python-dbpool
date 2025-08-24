@@ -96,16 +96,14 @@ class Connection(object):
 
         # convert single dict to list type
         if isinstance(cls._config['db'], dict):
+            db_config = cls._config['db']
             cls._config['db'] = [cls._config['db']]
+
+        if isinstance(cls._config['db'], list):
+            db_config = cls._config['db'][0]
 
         # setup db connection iterator
         cls._dbiter_ref = cls._dbiter()
-
-        # ref db_config
-        try:
-            db_config = cls._config['db'][0]
-        except TypeError:
-            db_config = cls._config['db']
 
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
