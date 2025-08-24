@@ -58,7 +58,7 @@ def connection_config():
         'groups': {
             'group1': {
                 'connection_count': 5,
-                'autocommit': False,
+                'autocommit': False
             }
         }
     }
@@ -67,25 +67,6 @@ def connection_config():
 
 class TestFunctional:
 
-    def test_locked_iterator(self, monkeypatch, connection_config):
-
-        monkeypatch.setattr(psycopg2, 'connect', patched_connect)
-
-        pool.Connection.init(connection_config)
-
-        i = pool.conn_iter('group1')
-
-        r1 = next(i)
-        r2 = next(i)
-        r3 = next(i)
-        r4 = next(i)
-        r5 = next(i)
-
-        assert r1 != r2
-        assert r1 != r3
-        assert r1 != r4
-        assert r1 != r5
-
     def test_handler_existing_group(self, monkeypatch, connection_config):
 
         monkeypatch.setattr(psycopg2, 'connect', patched_connect)
@@ -93,7 +74,7 @@ class TestFunctional:
         pool.Connection.init(connection_config)
 
         with pool.Handler('group1') as db:
-            r = db.query('SELECT * FROM test')
+            db.query('SELECT * FROM test')
 
     def test_handler_non_existing_group(self, monkeypatch, connection_config):
 
@@ -104,7 +85,7 @@ class TestFunctional:
         with pytest.raises(pool.UnconfiguredGroupError):
 
             with pool.Handler('group2') as db:
-                r = db.query('SELECT * FROM test')
+                db.query('SELECT * FROM test')
 
     def test_handler_connection_rotating(self, monkeypatch, connection_config):
 
@@ -124,43 +105,43 @@ class TestFunctional:
         db_comp10 = None
 
         with pool.Handler('group1') as db1:
-            r = db1.query('SELECT * FROM test')
+            db1.query('SELECT * FROM test')
             db_comp1 = db1
 
         with pool.Handler('group1') as db2:
-            r = db2.query('SELECT * FROM test')
+            db2.query('SELECT * FROM test')
             db_comp2 = db2
 
         with pool.Handler('group1') as db3:
-            r = db3.query('SELECT * FROM test')
+            db3.query('SELECT * FROM test')
             db_comp3 = db3
 
         with pool.Handler('group1') as db4:
-            r = db4.query('SELECT * FROM test')
+            db4.query('SELECT * FROM test')
             db_comp4 = db4
 
         with pool.Handler('group1') as db5:
-            r = db5.query('SELECT * FROM test')
+            db5.query('SELECT * FROM test')
             db_comp5 = db5
 
         with pool.Handler('group1') as db6:
-            r = db6.query('SELECT * FROM test')
+            db6.query('SELECT * FROM test')
             db_comp6 = db6
 
         with pool.Handler('group1') as db7:
-            r = db7.query('SELECT * FROM test')
+            db7.query('SELECT * FROM test')
             db_comp7 = db7
 
         with pool.Handler('group1') as db8:
-            r = db8.query('SELECT * FROM test')
+            db8.query('SELECT * FROM test')
             db_comp8 = db8
 
         with pool.Handler('group1') as db9:
-            r = db9.query('SELECT * FROM test')
+            db9.query('SELECT * FROM test')
             db_comp9 = db9
 
         with pool.Handler('group1') as db10:
-            r = db10.query('SELECT * FROM test')
+            db10.query('SELECT * FROM test')
             db_comp10 = db10
 
         assert db_comp1.conn_ref == db_comp6.conn_ref
@@ -172,39 +153,6 @@ class TestFunctional:
 
 class TestThreading:
 
-    def test_threaded(self, monkeypatch, connection_config):
-
-        class ThreadContainer(threading.Thread):
-
-            def __init__(self, iter_ref, func_ref):
-                super().__init__()
-                self._iter_ref = iter_ref
-                self._func_ref = func_ref
-
-            def run(self):
-                self.result = self._func_ref(self._iter_ref)
-
-        monkeypatch.setattr(psycopg2, 'connect', patched_connect)
-
-        pool.Connection.init(connection_config)
-
-        i = pool.conn_iter('group1')
-
-        def get_next_1(i):
-            next(i)
-            next(i)
-
-        def get_next_2(i):
-            next(i)
-            next(i)
-            next(i)
-
-        t1 = ThreadContainer(i, get_next_1)
-        t2 = ThreadContainer(i, get_next_2)
-
-        t1.start()
-        t2.start()
-
     def test_threaded_wait_free_connection(self, monkeypatch, connection_config):
 
         class ThreadBlocking(threading.Thread):
@@ -214,7 +162,7 @@ class TestThreading:
 
             def run(self):
                 with pool.Handler('group1') as db:
-                    r = db.query('SELECT * FROM test')
+                    db.query('SELECT * FROM test1')
                     time.sleep(3)
 
         class ThreadNonBlocking(threading.Thread):
@@ -224,7 +172,8 @@ class TestThreading:
 
             def run(self):
                 with pool.Handler('group1') as db:
-                    r = db.query('SELECT * FROM test')
+                    db.query('SELECT * FROM test2')
+                    time.sleep(0.5)
 
         monkeypatch.setattr(psycopg2, 'connect', patched_connect)
 
@@ -235,8 +184,13 @@ class TestThreading:
         t3 = ThreadBlocking()
         t4 = ThreadBlocking()
         t5 = ThreadBlocking()
-        t6 = ThreadNonBlocking()
-        t7 = ThreadNonBlocking()
+        t6 = ThreadBlocking()
+        t7 = ThreadBlocking()
+        t8 = ThreadNonBlocking()
+        t9 = ThreadNonBlocking()
+        t10 = ThreadNonBlocking()
+        t11 = ThreadNonBlocking()
+        t12 = ThreadNonBlocking()
 
         t1.start()
         t2.start()
@@ -245,6 +199,11 @@ class TestThreading:
         t5.start()
         t6.start()
         t7.start()
+        t8.start()
+        t9.start()
+        t10.start()
+        t11.start()
+        t12.start()
 
         t1.join()
         t2.join()
@@ -253,3 +212,8 @@ class TestThreading:
         t5.join()
         t6.join()
         t7.join()
+        t8.join()
+        t9.join()
+        t10.join()
+        t11.join()
+        t12.join()

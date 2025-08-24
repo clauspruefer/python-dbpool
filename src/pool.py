@@ -32,6 +32,9 @@ class UnconfiguredGroupError(Exception):
     """
 
 
+global_lock = threading.Lock()
+
+
 def conn_iter(connection_group):
     """
     Global Connection Iterator.
@@ -74,10 +77,9 @@ class Connection(object):
     def init(cls, config):
         """ Initialize "static" Class Instance.
 
-        :param dict config: configuration data
+        :param dict config: single configuration data
+        :param list of dict config: multiple configuration data
         """
-
-        assert isinstance(config, dict), 'config must be dict type'
 
         cls.logger = logging.getLogger(__name__)
         cls._config = config
@@ -92,16 +94,15 @@ class Connection(object):
         - setup groups (call _setup_groups())
         """
 
-        # convert single dict type to list containing 1 dict element
+        # convert single dict to list type
         if isinstance(cls._config['db'], dict):
+            db_config = cls._config['db']
             cls._config['db'] = [cls._config['db']]
 
         # setup db connection iterator
         cls._dbiter_ref = cls._dbiter()
 
-        # ref db_config
         db_config = cls._config['db'][0]
-
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
 
@@ -268,6 +269,8 @@ class Connection(object):
             db_container = next(cls._dbiter_ref)
             group_container = cls._config['groups'][conn_group]
 
+            cls.logger.debug('connection connect() db_config:{}'.format(db_container))
+
             group_container['connections'][conn_id] = (
                 psycopg2.connect(
                     dbname = db_container['name'],
@@ -416,12 +419,12 @@ class Handler(object):
 
         threading_model = Connection.get_threading_model()
         assert threading_model in ['threaded', 'non-threaded'], 'threading model must be threaded or non-threaded.'
+        self.logger.info('handler() __init__() threading_model:{}'.format(threading_model))
 
         while True:
             try:
                 if threading_model == 'threaded':
-                    lock = threading.Lock()
-                    with lock:
+                    with global_lock:
                         self._process()
                 else:
                     self._process()
