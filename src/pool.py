@@ -99,12 +99,10 @@ class Connection(object):
             db_config = cls._config['db']
             cls._config['db'] = [cls._config['db']]
 
-        if isinstance(cls._config['db'], list):
-            db_config = cls._config['db'][0]
-
         # setup db connection iterator
         cls._dbiter_ref = cls._dbiter()
 
+        db_config = cls._config['db'][0]
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
 
