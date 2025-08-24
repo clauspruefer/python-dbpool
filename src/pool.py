@@ -94,7 +94,7 @@ class Connection(object):
         - setup groups (call _setup_groups())
         """
 
-        # convert single dict type to list containing 1 dict element
+        # convert single dict to list type
         if isinstance(cls._config['db'], dict):
             cls._config['db'] = [cls._config['db']]
 
@@ -102,7 +102,10 @@ class Connection(object):
         cls._dbiter_ref = cls._dbiter()
 
         # ref db_config
-        db_config = cls._config['db'][0]
+        try:
+            db_config = cls._config['db'][0]
+        except TypeError:
+            db_config = cls._config['db']
 
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
