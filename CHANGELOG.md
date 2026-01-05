@@ -34,6 +34,14 @@
   - Improved connection iteration and management
   - Improved threading-model stability / thread locking
 
+- **Testing**: Added pytest-based unit test suite
+  - Tests for threaded and non-threaded connection handling
+  - Tests for single and multiple database endpoint configurations
+  - Tests for connection rotation and pool management
+
+- **CI/CD**: Added GitHub Actions workflow
+  - Pylint code analysis for Python 3.8, 3.9, and 3.10
+
 ## Version 0.99
 
 - Add Handler.commit() procedure used for autocommit=False connections
