@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.0 (Stable)
+
+- Stable release tested and verified
+- All features from Version 1.0rc1 are now production-ready
+
 ## Version 1.0rc1
 
 ### Major Features
