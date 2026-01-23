@@ -1,0 +1,70 @@
+{
+    "system": {
+        "config": {
+            "global": {
+                "managers": {
+                    "failover_mode": false,
+                    "run_on_host": true
+                }
+            },
+            "roles": {
+                "SYSOwner": {
+                    "id": "admin",
+                    "password": "admin"
+                },
+                "SYSPgDBReplication": {
+                    "id": "replicator",
+                    "password": "secure"
+                }
+            }
+        },
+        "networks": [
+            {
+                "dbpool-net": {
+                    "config": {
+                        "net": {
+                            "ipv4": {
+                                "sbunet": "192.168.10.0",
+                                "netmask": "255.255.255.0",
+                                "netbits": 24,
+                                "gateway": "192.168.10.254"
+                            },
+                            "parts": {
+                                "local-1": {
+                                    "ipv4": {
+                                        "start": 1,
+                                        "end": 252,
+                                        "managers": [ 253 ]
+                                    }
+                                }
+                            }
+                        },
+                        "permissions": {
+                            "SYSOwner": "admin"
+                        },
+                        "scale": {
+                            "min-nodes": 2,
+                            "max-nodes": 4,
+                            "metrics": {
+                                "characteristics": "default"
+                            }
+                        }
+                    }
+                }
+            }
+        ],
+        "runtime": {
+            "network": {
+                "nodes": [
+                    {
+                        "dbpool-net-0": {
+                            "status": "active",
+                            "metrics": {
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
