@@ -56,13 +56,6 @@
         "runtime": {
             "network": {
                 "nodes": [
-                    {
-                        "dbpool-net-0": {
-                            "status": "active",
-                            "metrics": {
-                            }
-                        }
-                    }
                 ]
             }
         }
