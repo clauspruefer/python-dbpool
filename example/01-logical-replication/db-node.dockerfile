@@ -7,6 +7,10 @@ RUN apt-get -qq install iproute2 iputils-ping net-tools python3-pip python3-psyc
 RUN pip3 install microesb --break-system-packages
 RUN pip3 install jsocket --break-system-packages
 
+RUN mkdir /json-rpc-server
+COPY ./db-node-rpc/*.py /json-rpc-server/
+COPY ./db-node-rpc/*.sh /json-rpc-server/
+
 ENV POSTGRES_USER postgres
 ENV POSTGRES_PASSWORD password
 ENV POSTGRES_DB lb-test
