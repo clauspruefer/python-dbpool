@@ -1,11 +1,10 @@
 {
     "system": {
         "config": {
-            "global": {
-                "managers": {
-                    "failover_mode": false,
-                    "run_on_host": true
-                }
+            "network": {
+                "failover_mode": false,
+                "run_on_host": true,
+                "managers": [ "172.16.1.254" ]
             },
             "roles": {
                 "SYSOwner": {
@@ -14,40 +13,40 @@
                 },
                 "SYSPgDBReplication": {
                     "id": "replicator",
-                    "password": "secure"
+                    "password": "replicator"
                 }
             }
         },
         "networks": [
             {
-                "dbpool-net": {
-                    "config": {
-                        "net": {
-                            "ipv4": {
-                                "sbunet": "192.168.10.0",
-                                "netmask": "255.255.255.0",
-                                "netbits": 24,
-                                "gateway": "192.168.10.254"
-                            },
-                            "parts": {
-                                "local-1": {
-                                    "ipv4": {
-                                        "start": 1,
-                                        "end": 252,
-                                        "managers": [ 253 ]
-                                    }
+                "id": "dbpool-net",
+                "config": {
+                    "net": {
+                        "ipv4": {
+                            "subnet": "172.16.1.0",
+                            "netmask": "255.255.255.0",
+                            "netbits": 24,
+                            "gateway": "172.16.1.254",
+                            "hostaddress": "172.16.1.254"
+                        },
+                        "parts": [
+                            {
+                                "id": "dbpool-net-1",
+                                "ipv4": {
+                                    "start": 1,
+                                    "end": 253
                                 }
                             }
-                        },
-                        "permissions": {
-                            "SYSOwner": "admin"
-                        },
-                        "scale": {
-                            "min-nodes": 2,
-                            "max-nodes": 4,
-                            "metrics": {
-                                "characteristics": "default"
-                            }
+                        ]
+                    },
+                    "permissions": {
+                        "SYSOwner": "admin"
+                    },
+                    "scale": {
+                        "min-nodes": 2,
+                        "max-nodes": 4,
+                        "metrics": {
+                            "characteristics": "default"
                         }
                     }
                 }
