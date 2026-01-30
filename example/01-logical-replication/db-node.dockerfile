@@ -4,8 +4,10 @@ MAINTAINER Claus Prüfer
 RUN apt-get -qq update -y
 RUN apt-get -qq install iproute2 iputils-ping net-tools python3-pip python3-psycopg2 -y
 
+COPY ./packages/jsocket-1.9.5.tar.gz /
+
 RUN pip3 install microesb --break-system-packages
-RUN pip3 install jsocket --break-system-packages
+RUN pip3 install ./jsocket-1.9.5.tar.gz --break-system-packages
 
 RUN mkdir /json-rpc-server
 COPY ./db-node-rpc/*.py /json-rpc-server/
