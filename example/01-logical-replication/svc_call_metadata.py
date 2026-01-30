@@ -2,7 +2,7 @@ update_net_topology = {
     'SYSServiceID': 'UpdateNetworkTopology',
     'data': [
         {
-            'SYSBackendMethod': { 'NetworkTopology': 'update' },
+            'SYSBackendMethod': { 'System': 'update_network_topology' },
             'System': {
                 'id': 'db-loadbalancing-test',
                 'NetworkTopology': {
