@@ -7,7 +7,10 @@ service_properties = {
                 'required': True,
                 'description': 'System id'
             }
-        }
+        },
+        'methods': [
+            'update_network_topology'
+        ]
     },
     'NetworkTopology': {
         'properties': {
@@ -17,35 +20,37 @@ service_properties = {
                 'required': False,
                 'description': 'Network topology type'
             }
-        },
-        'methods': [
-            'update'
-        ]
+        }
     },
     'NetIPv4': {
         'properties': {
             'subnet': {
                 'type': 'str',
+                'default': None,
                 'required': True,
                 'description': 'IPv4 subnet'
             },
             'netmask': {
                 'type': 'str',
+                'default': None,
                 'required': True,
                 'description': 'IPv4 netmask'
             },
             'netbits': {
                 'type': 'int',
+                'default': None,
                 'required': True,
                 'description': 'IPv4 netmask bits'
             },
             'gateway': {
                 'type': 'str',
+                'default': None,
                 'required': True,
                 'description': 'IPv4 gateway address'
             },
             'hostaddress': {
                 'type': 'str',
+                'default': None,
                 'required': False,
                 'description': 'IPv4 docker host address'
             }
@@ -59,16 +64,19 @@ service_properties = {
         'properties': {
             'name': {
                 'type': 'str',
+                'default': None,
                 'required': True,
                 'description': 'Hostname'
             },
             'ipv4': {
                 'type': 'str',
+                'default': None,
                 'required': False,
                 'description': 'IPv4 address'
             },
             'ipv6': {
                 'type': 'str',
+                'default': None,
                 'required': False,
                 'description': 'IPv6 address'
             }
