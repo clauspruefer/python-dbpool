@@ -18,12 +18,11 @@ def mm_send(client_ref, payload):
 def mm_close(client_ref):
     client_ref.close()
 
-
-sysconfig = None
-
+# load configuration
 with open('sysconfig.json', 'r') as fh:
     sysconfig = json.loads(fh.read())
 
+# model config parts
 network = sysconfig['system']['networks'][0]
 
 network_id = network['id']
@@ -34,6 +33,7 @@ network_segment = '{}/{}'.format(
     network_config['net']['ipv4']['netbits']
 )
 
+# make network segment iterator
 network_ipv4_addresses = iter(ipcalc.Network(network_segment))
 
 svc_net_topology = svc_call_metadata.update_net_topology['data'][0]['System']['NetworkTopology']
@@ -47,7 +47,7 @@ for i in range(0, 3):
 
     node_cfg = {
         'name': node_id,
-        'ipv4': node_ip
+        'ipv4': str(node_ip)
     }
 
     svc_net_topology['HostNode'].append(node_cfg)
@@ -61,6 +61,10 @@ for i in range(0, 3):
     subprocess.run(cmd_run_container, capture_output=True)
 
     cmd_start_server = 'docker exec {} /json-rpc-server/start-server.sh'.format(node_id)
-    res = subprocess.run(cmd_start_server, shell=True, capture_output=True)
-    test = res.stdout.strip()
-    print(test)
+    res = subprocess.run(cmd_start_server, shell=True, capture_output=True, check=True)
+
+for node in svc_net_topology['HostNode']:
+
+    client = mm_connect(node['ipv4'])
+    res = mm_send(client, svc_call_metadata.update_net_topology, check=True)
+    print(res)
