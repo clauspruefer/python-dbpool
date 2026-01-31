@@ -29,6 +29,8 @@
                             "gateway": "172.16.1.254",
                             "hostaddress": "172.16.1.254"
                         },
+                        "domain": ".localnet",
+                        "domain_prepend_netid": true,
                         "parts": [
                             {
                                 "id": "dbpool-net-1",
