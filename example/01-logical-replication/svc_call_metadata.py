@@ -5,9 +5,10 @@ update_net_topology = {
             'SYSBackendMethod': { 'System': 'update_network_topology' },
             'System': {
                 'id': 'db-loadbalancing-test',
+                'Network': {},
                 'NetworkTopology': {
                     'NetIPv4': {},
-                    'HostNode': []
+                    'TopologyHost': []
                 }
             }
         }
