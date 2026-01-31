@@ -3,6 +3,9 @@ references = {
         'System': {
             'property_ref': 'System',
             'children': {
+                'Network': {
+                    'property_ref': 'Network'
+                },
                 'NetworkTopology': {
                     'property_ref': 'NetworkTopology',
                     'children': {
@@ -12,8 +15,8 @@ references = {
                         'NetIPv6': {
                             'property_ref': 'NetIPv6'
                         },
-                        'HostNode': {
-                            'property_ref': 'HostNode'
+                        'TopologyHost': {
+                            'property_ref': 'TopologyHost'
                         }
                     }
                 }

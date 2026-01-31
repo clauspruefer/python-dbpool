@@ -12,6 +12,34 @@ service_properties = {
             'update_network_topology'
         ]
     },
+    'Network': {
+        'properties': {
+            'hostname': {
+                'type': 'str',
+                'default': None,
+                'required': True,
+                'description': 'Network host name'
+            },
+            'domain': {
+                'type': 'str',
+                'default': 'default.localnet',
+                'required': True,
+                'description': 'Network domain (name)'
+            },
+            'address_v4': {
+                'type': 'str',
+                'default': None,
+                'required': True,
+                'description': 'Network IPv4 address'
+            },
+            'address_v6': {
+                'type': 'str',
+                'default': None,
+                'required': False,
+                'description': 'Network IPv6 address'
+            }
+        }
+    },
     'NetworkTopology': {
         'properties': {
             'type': {
@@ -60,7 +88,7 @@ service_properties = {
         'properties': {
         }
     },
-    'HostNode': {
+    'TopologyHost': {
         'properties': {
             'name': {
                 'type': 'str',

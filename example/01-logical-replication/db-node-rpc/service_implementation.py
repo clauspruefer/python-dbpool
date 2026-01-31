@@ -1,4 +1,5 @@
 import abc
+import json
 import logging
 import datetime
 
@@ -12,14 +13,28 @@ class System(microesb.ClassHandler):
     def __init__(self):
         super().__init__()
 
+    def update_network_topology(self):
+
+        self.json_transform()
+
+        net_config = {}
+        net_config['Network'] = self.Network.json_dict
+        net_config['NetworkTopology'] = self.NetworkTopology.TopologyHost.json_dict
+
+        with open('/tmp/net-config.json', 'w')as fh:
+            fh.write(json.dumps(net_config))
+
+
+class Network(microesb.ClassHandler):
+
+    def __init__(self):
+        super().__init__()
+
 
 class NetworkTopology(microesb.ClassHandler):
 
     def __init__(self):
         super().__init__()
-
-    def update(self):
-        pass
 
 
 class NetIPv4(microesb.ClassHandler):
@@ -34,7 +49,7 @@ class NetIPv6(microesb.ClassHandler):
         super().__init__()
 
 
-class HostNode(microesb.MultiClassHandler):
+class TopologyHost(microesb.MultiClassHandler):
 
     def __init__(self):
         super().__init__()
