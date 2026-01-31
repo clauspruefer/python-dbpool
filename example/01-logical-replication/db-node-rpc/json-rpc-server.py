@@ -33,18 +33,18 @@ class JSONServer(jsocket.JsonServer):
 
     def _process_message(self, call_obj):
         if isinstance(call_obj, dict):
-            print(call_obj)
+            print('Call obj:{}'.format(call_obj))
             class_mapper = microesb.ClassMapper(
                 class_references=class_reference[call_obj['SYSServiceID']],
                 class_mappings=class_mapping,
                 class_properties=service_properties
             )
-            res = microesb.ServiceExecuter().execute_get_hierarchy(
+            res = microesb.ServiceExecuter().execute(
                 class_mapper=class_mapper,
                 service_data=call_obj
             )
-            return res[0]['System']['object_instance'].json_dict
-        return { "Status": "NoObject received" }
+            return { "Status": "ok" }
+        return { "Status": "error - objtype not dict()" }
 
 
 server = JSONServer(
