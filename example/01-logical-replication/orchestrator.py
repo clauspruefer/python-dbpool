@@ -20,7 +20,7 @@ def mm_close(client_ref):
 
 
 # load configuration
-with open('sysconfig.json', 'r') as fh:
+with open('./sysconfig.json', 'r') as fh:
     sysconfig = json.loads(fh.read())
 
 # model config parts
