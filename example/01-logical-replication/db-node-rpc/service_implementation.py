@@ -1,7 +1,5 @@
-import abc
 import json
 import logging
-import datetime
 
 from microesb import microesb
 
