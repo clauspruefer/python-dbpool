@@ -28,6 +28,7 @@ network = sysconfig['system']['networks'][0]
 
 network_id = network['id']
 network_config = network['config']
+network_config_scale = network['config']['scale']
 
 network_segment = '{}/{}'.format(
     network_config['net']['ipv4']['subnet'],
@@ -43,8 +44,11 @@ svc_net = svc_system['Network']
 svc_net_topology = svc_system['NetworkTopology']
 svc_net_topology['NetIPv4'] = network_config['net']['ipv4']
 
+# get node-count from config
+count_nodes = network_config_scale['max-nodes']
+
 # start containers
-for i in range(0, 3):
+for i in range(0, count_nodes):
 
     node_id = 'node-'+str(i)
     node_ip = next(network_ipv4_addresses)
