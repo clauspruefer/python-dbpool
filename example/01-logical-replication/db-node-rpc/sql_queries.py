@@ -9,19 +9,19 @@ CREATE ROLE testwriter WITH LOGIN PASSWORD 'testwriter';
 '''
 
 create_table = '''
-CREATE TABLE {table_name} (
-{table_columns}
+CREATE TABLE %(table_name)s (
+%(table_columns)s
 );
 
-GRANT SELECT ON TABLE {table_name} TO replicator;
-GRANT SELECT ON TABLE {table_name} TO testreader;
-GRANT INSERT ON TABLE {table_name} TO testwriter;
+GRANT SELECT ON TABLE %(table_name)s TO replicator;
+GRANT SELECT ON TABLE %(table_name)s TO testreader;
+GRANT INSERT ON TABLE %(table_name)s TO testwriter;
 '''
 
 create_publication = '''
-CREATE PUBLICATION {publication_id} FOR TABLE {table_name};
+CREATE PUBLICATION %(publication_id)s FOR TABLE %(table_name)s;
 '''
 
 create_subscription = '''
-CREATE SUBSCRIPTION {subscription_id} CONNECTION 'host={host_ip} dbname=postgres port=5432' PUBLICATION {publication_id} WITH (copy_data = false, origin = none);
+CREATE SUBSCRIPTION %(subscription_id)s CONNECTION 'host=%(host_ip)s dbname=postgres port=5432' PUBLICATION %(publication_id)s WITH (copy_data = false, origin = none);
 '''
