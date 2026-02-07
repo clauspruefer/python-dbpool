@@ -10,7 +10,7 @@ CREATE ROLE testwriter WITH LOGIN PASSWORD 'testwriter';
 
 create_table = '''
 CREATE TABLE %(table_name)s (
-%(table_columns)s
+ {table_columns}
 );
 
 GRANT SELECT ON TABLE %(table_name)s TO replicator;
