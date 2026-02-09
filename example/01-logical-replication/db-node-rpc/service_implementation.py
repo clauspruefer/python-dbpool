@@ -1,4 +1,5 @@
 import json
+import copy
 import logging
 import sql_queries
 
@@ -59,7 +60,7 @@ class Database(microesb.ClassHandler):
     def __init__(self):
         super().__init__()
         self.db_con = False
-        self.db_con_autoconnect = True
+        self.db_con_autocommit = True
         self.db_host = '127.0.0.1'
         self.db_user = 'postgres'
         self.db_name = 'postgres'
@@ -94,7 +95,8 @@ class Database(microesb.ClassHandler):
             )
 
     def subscribe_to_others(self):
-        host_list = self.netconf['NetworkTopology']['TopologyHost']
+        host_list = copy.deepcopy(self.netconf['NetworkTopology']['TopologyHost'])
+        host_list = host_list[:-1]
         for node in reversed(host_list):
             with self.db_con.cursor() as crs:
                 crs.execute(
