@@ -1,5 +1,6 @@
 import json
 import logging
+import sql_queries
 
 from microesb import microesb
 
@@ -19,7 +20,7 @@ class System(microesb.ClassHandler):
         net_config['Network'] = self.Network.json_dict
         net_config['NetworkTopology'] = self.NetworkTopology.TopologyHost.json_dict
 
-        with open('/tmp/net-config.json', 'w')as fh:
+        with open('/tmp/net-config.json', 'w') as fh:
             fh.write(json.dumps(net_config))
 
 
@@ -57,13 +58,67 @@ class Database(microesb.ClassHandler):
 
     def __init__(self):
         super().__init__()
+        self.db_con = False
+        self.db_con_autoconnect = True
+        self.db_host = '127.0.0.1'
+        self.db_user = 'postgres'
+        self.db_name = 'postgres'
+
+        with open('/tmp/net-config.json', 'r') as fh:
+            self.netconf = json.loads(fh.read())
+
+    def connect(self):
+        self.db_con = psycopg2.connect(
+            "dbname='{}' user='{}' host='{}'".format(
+                self.db_name,
+                self.db_user,
+                self.db_host
+            )
+        )
+        self.db_con.autocommit = self.db_con_autoconnect
 
     def init_db(self):
-        pass
+        with self.db_con.cursor() as crs:
+            crs.execute(sql_queries.init_db)
 
     def create_replica_table(self):
         pass
 
+    def create_publication(self):
+        with self.db_con.cursor() as crs:
+            crs.execute(
+                sql_queries.create_publication, {
+                    'table_name': self.Table.name,
+                    'publication_id': self._gen_publication_id()
+                }
+            )
+
+    def subscribe_to_others(self):
+        host_list = self.netconf['NetworkTopology']['TopologyHost']
+        for node in reversed(host_list):
+            with self.db_con.cursor() as crs:
+                crs.execute(
+                    sql_queries.create_subscription, {
+                        'host_ip': node['ipv4'],
+                        'subscription_id': self._gen_subscription_id(node['name'])
+                        'publication_id': 'pub-{}-{}'.format(node['name'], self.Table.name)
+                    }
+                )
+
+    def subscribe_to_node(self, node_id):
+        pass
+
+    def _gen_publication_id(self):
+        return 'pub-{}-{}'.format(
+            self.netconf['Network']['hostname'],
+            self.Table.name
+        )
+
+    def _gen_subscription_id(self, node_id):
+        return 'sub-{}-{}'.format(
+            node_id,
+            self.Table.name
+        )
 
 class Table(microesb.ClassHandler):
 
