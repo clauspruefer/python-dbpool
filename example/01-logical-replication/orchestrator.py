@@ -50,9 +50,8 @@ count_nodes = network_config_scale['max-nodes']
 # start containers
 for i in range(0, count_nodes):
 
-    node_id = 'node-'+str(i)
+    node_id = 'node'+str(i)
     node_ip = next(network_ipv4_addresses)
-    #node_ip = '192.168.10.120'
 
     node_cfg = {
         'name': node_id,
@@ -75,7 +74,6 @@ for i in range(0, count_nodes):
 
     cmd_start_server = 'docker exec {} /json-rpc-server/start-server.sh'.format(node_id)
     res = subprocess.run(cmd_start_server, shell=True, capture_output=True, check=True)
-
 
 for node in svc_net_topology['TopologyHost']:
 
