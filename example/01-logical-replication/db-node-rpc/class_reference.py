@@ -25,7 +25,8 @@ references = {
     },
     'InitDatabase': {
         'Database': {
-            'property_ref': 'Database'
+            'property_ref': 'Database',
+            'children': {}
         }
     },
     'CreateReplicaTable': {

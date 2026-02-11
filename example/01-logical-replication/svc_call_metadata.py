@@ -5,6 +5,8 @@ update_net_topology = {
             'SYSBackendMethod': { 'System': 'update_network_topology' },
             'System': {
                 'id': 'db-loadbalancing-test',
+                'node_index': None,
+                'node_id': None,
                 'Network': {},
                 'NetworkTopology': {
                     'NetIPv4': {},
@@ -15,13 +17,13 @@ update_net_topology = {
     ]
 }
 
-set_global_db_properties = {
+init_database = {
     'SYSServiceID': 'InitDatabase',
     'data': [
         {
             'SYSBackendMethod': { 'Database': 'init_db' },
             'Database': {
-                'id': 'lb-test'
+                'createdb_name': 'lb-test'
             }
         }
     ]
@@ -33,7 +35,7 @@ create_repl_table = {
         {
             'SYSBackendMethod': { 'Database': 'create_replica_table' },
             'Database': {
-                'id': 'lb-test',
+                'name': 'lb-test',
                 'Table': {
                     'name': 'table1',
                     'add_timestamp_cols': True,

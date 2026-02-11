@@ -6,6 +6,18 @@ service_properties = {
                 'default': None,
                 'required': True,
                 'description': 'System id'
+            },
+            'node_index': {
+                'type': 'int',
+                'default': None,
+                'required': True,
+                'description': 'Node index'
+            },
+            'node_id': {
+                'type': 'str',
+                'default': None,
+                'required': True,
+                'description': 'Node id (hostname)'
             }
         },
         'methods': [
@@ -112,11 +124,17 @@ service_properties = {
     },
     'Database': {
         'properties': {
-            'id': {
+            'name': {
+                'type': 'str',
+                'default': 'postgres',
+                'required': False,
+                'description': 'Database name (to connect to)'
+            },
+            'createdb_name': {
                 'type': 'str',
                 'default': None,
-                'required': True,
-                'description': 'Database id'
+                'required': False,
+                'description': 'Database name (to create)'
             }
         },
         'methods': [
@@ -158,7 +176,7 @@ service_properties = {
                 'type': 'str',
                 'default': None,
                 'required': True,
-                'description': 'Column id'
+                'description': 'Column name'
             },
             'type': {
                 'type': 'str',
@@ -171,6 +189,12 @@ service_properties = {
                 'default': None,
                 'required': False,
                 'description': 'Column default value'
+            },
+            'not_null': {
+                'type': 'bool',
+                'default': False,
+                'required': False,
+                'description': 'Null constraint'
             }
         }
     }

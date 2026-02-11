@@ -55,12 +55,9 @@ for i in range(0, count_nodes):
 
     node_cfg = {
         'name': node_id,
-        'ipv4': str(node_ip)
+        'ipv4': str(node_ip),
+        'index': i
     }
-
-    svc_net['hostname'] = node_id
-    svc_net['domain'] = network_config['net']['domain']
-    svc_net['address_v4'] = str(node_ip)
 
     svc_net_topology['TopologyHost'].append(node_cfg)
 
@@ -75,9 +72,25 @@ for i in range(0, count_nodes):
     cmd_start_server = 'docker exec {} /json-rpc-server/start-server.sh'.format(node_id)
     res = subprocess.run(cmd_start_server, shell=True, capture_output=True, check=True)
 
+client_conn = {}
+
+for node in svc_net_topology['TopologyHost']:
+    client_conn[node['name']] = mm_connect(node['ipv4'])
+
 for node in svc_net_topology['TopologyHost']:
 
-    print(svc_call_metadata.update_net_topology)
-    client = mm_connect(node['ipv4'])
-    res = mm_send(client, svc_call_metadata.update_net_topology)
+    svc_net['hostname'] = node['name']
+    svc_net['domain'] = network_config['net']['domain']
+    svc_net['address_v4'] = node['ipv4']
+
+    svc_system['node_index'] = node['index']
+    svc_system['node_id'] = node['name']
+
+    res = mm_send(client_conn[node['name']], svc_call_metadata.update_net_topology)
+    print(res)
+
+    res = mm_send(client_conn[node['name']], svc_call_metadata.init_database)
+    print(res)
+
+    res = mm_send(client_conn[node['name']], svc_call_metadata.create_repl_table)
     print(res)
