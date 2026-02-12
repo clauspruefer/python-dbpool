@@ -61,3 +61,19 @@ create_repl_table = {
         }
     ]
 }
+
+subscribe_dst_node = {
+    'SYSServiceID': 'SubscribeDstNode',
+    'data': [
+        {
+            'SYSBackendMethod': { 'Database': 'subscribe_to_node' },
+            'Database': {
+                'name': 'lb-test',
+                'subscribe_dst_node': None,
+                'Table': {
+                    'name': 'table1'
+                }
+            }
+        }
+    ]
+}

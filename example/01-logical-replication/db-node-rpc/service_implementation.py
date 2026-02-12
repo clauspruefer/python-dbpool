@@ -98,7 +98,7 @@ class Database(microesb.ClassHandler):
             table_columns=self.Table.get_table_sql()
         )
 
-        logger.debug(ct_sql)
+        logger.debug('create_replica_table sql:{}'.format(ct_sql))
 
         with self.conn.cursor() as crs:
             crs.execute(ct_sql)
@@ -116,11 +116,15 @@ class Database(microesb.ClassHandler):
             )
 
     def _subscribe_to_others(self):
+
         node_index = self.netconf['System']['node_index']
+
         if node_index > 0:
+
             host_list = self.netconf['NetworkTopology']['TopologyHost']
             host_list_cut = host_list[0:node_index]
             logger.debug('host_list_cut:{}'.format(host_list_cut))
+
             for node in reversed(host_list_cut):
                 with self.conn.cursor() as crs:
                     crs.execute(
@@ -131,8 +135,26 @@ class Database(microesb.ClassHandler):
                         )
                     )
 
-    def subscribe_to_node(self, node_id):
-        pass
+    def subscribe_to_node(self):
+
+        self._connect()
+
+        dst_node = self._get_node_by_id(self.subscribe_dst_node)
+
+        logger.debug('subscribe2node sys_node:{} dst_node:{}'.format(
+                self.netconf['System']['node_id'],
+                self.subscribe_dst_node
+            )
+        )
+
+        with self.conn.cursor() as crs:
+            crs.execute(
+                sql_queries.create_subscription.format(
+                    host_ip=dst_node['ipv4'],
+                    subscription_id=self._gen_subscription_id(dst_node['name']),
+                    publication_id='pub_{}_{}'.format(dst_node['name'], self.Table.name)
+                )
+            )
 
     def _gen_publication_id(self):
         return 'pub_{}_{}'.format(
@@ -146,6 +168,11 @@ class Database(microesb.ClassHandler):
             dst_node_id,
             self.Table.name
         )
+
+    def _get_node_by_id(self, node_id):
+        # we should use ordered dict in the future
+        host_list = self.netconf['NetworkTopology']['TopologyHost']
+        return next((elm for elm in host_list if elm['name'] == node_id))
 
 
 class Table(microesb.ClassHandler):

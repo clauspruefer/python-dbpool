@@ -43,5 +43,15 @@ references = {
                 }
             }
         }
+    },
+    'SubscribeDstNode': {
+        'Database': {
+            'property_ref': 'Database',
+            'children': {
+                'Table': {
+                    'property_ref': 'Table'
+                }
+            }
+        }
     }
 }

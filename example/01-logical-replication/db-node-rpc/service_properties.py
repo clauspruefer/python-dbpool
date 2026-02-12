@@ -135,11 +135,18 @@ service_properties = {
                 'default': None,
                 'required': False,
                 'description': 'Database name (to create)'
+            },
+            'subscribe_dst_node': {
+                'type': 'str',
+                'default': None,
+                'required': False,
+                'description': 'Subscribe destination node id'
             }
         },
         'methods': [
             'init_db',
-            'create_replica_table'
+            'create_replica_table',
+            'subscribe_to_node'
         ]
     },
     'Table': {

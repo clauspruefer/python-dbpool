@@ -74,9 +74,11 @@ for i in range(0, count_nodes):
 
 client_conn = {}
 
+# setup node connections
 for node in svc_net_topology['TopologyHost']:
     client_conn[node['name']] = mm_connect(node['ipv4'])
 
+# init database / create table / subscribe to others
 for node in svc_net_topology['TopologyHost']:
 
     svc_net['hostname'] = node['name']
@@ -94,3 +96,13 @@ for node in svc_net_topology['TopologyHost']:
 
     res = mm_send(client_conn[node['name']], svc_call_metadata.create_repl_table)
     print(res)
+
+    # subscribe others to node
+    for i in range (node['index'], 0, -1):
+
+        node_item = svc_net_topology['TopologyHost'][i-1]
+        print('Index:{} NodeItem:{}'.format(i-1, node_item))
+
+        svc_call_metadata.subscribe_dst_node['data'][0]['Database']['subscribe_dst_node'] = node['name']
+        res = mm_send(client_conn[node_item['name']], svc_call_metadata.subscribe_dst_node)
+        print(res)

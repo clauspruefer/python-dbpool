@@ -14,5 +14,9 @@ class_mapping = {
         'Database': 'Database',
         'Table': 'Table',
         'Column': 'Column'
+    },
+    'SubscribeDstNode': {
+        'Database': 'Database',
+        'Table': 'Table'
     }
 }

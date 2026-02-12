@@ -14,6 +14,7 @@ CREATE TABLE {table_name} (
  {table_columns}
 );
 
+GRANT USAGE ON SCHEMA public TO replicator;
 GRANT SELECT ON TABLE {table_name} TO replicator;
 GRANT SELECT ON TABLE {table_name} TO testreader;
 GRANT INSERT ON TABLE {table_name} TO testwriter;
@@ -24,5 +25,5 @@ CREATE PUBLICATION {publication_id} FOR TABLE {table_name};
 '''
 
 create_subscription = '''
-CREATE SUBSCRIPTION {subscription_id} CONNECTION 'host={host_ip} dbname=postgres port=5432' PUBLICATION {publication_id} WITH (copy_data = false, origin = none);
+CREATE SUBSCRIPTION {subscription_id} CONNECTION 'host={host_ip} dbname=lb-test user=replicator port=5432' PUBLICATION {publication_id} WITH (copy_data = false, origin = none);
 '''
