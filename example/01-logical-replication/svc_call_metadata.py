@@ -43,7 +43,7 @@ create_repl_table = {
                     'Column': [
                         {
                             'name': 'id',
-                            'type': 'serial',
+                            'type': 'bigserial',
                             'primary_key': True
                         },
                         {
