@@ -104,6 +104,12 @@ class Database(microesb.ClassHandler):
         with self.conn.cursor() as crs:
             crs.execute(ct_sql)
 
+        with self.conn.cursor() as crs:
+            crs.execute(sql_queries.table_upd_ts_trigger.format(
+                    table_name=self.Table.name,
+                )
+            )
+
         self._create_publication()
         self._subscribe_to_others()
 
