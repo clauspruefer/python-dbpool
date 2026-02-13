@@ -1,8 +1,3 @@
-init_database = '''
-ALTER SYSTEM SET max_replication_slots = 10;
-ALTER SYSTEM SET max_wal_senders = 10;
-'''
-
 init_roles = '''
 CREATE ROLE replicator WITH REPLICATION LOGIN PASSWORD 'replicator';
 CREATE ROLE testreader WITH LOGIN PASSWORD 'testreader';
@@ -14,10 +9,13 @@ CREATE TABLE {table_name} (
  {table_columns}
 );
 
+SELECT setval('{table_name}_id_seq', {table_seq_start}, true);
+
 GRANT USAGE ON SCHEMA public TO replicator;
 GRANT SELECT ON TABLE {table_name} TO replicator;
 GRANT SELECT ON TABLE {table_name} TO testreader;
 GRANT INSERT ON TABLE {table_name} TO testwriter;
+GRANT ALL ON {table_name}_id_seq TO testwriter;
 '''
 
 create_publication = '''
