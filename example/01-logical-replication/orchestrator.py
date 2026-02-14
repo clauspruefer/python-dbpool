@@ -45,7 +45,7 @@ svc_net_topology = svc_system['NetworkTopology']
 svc_net_topology['NetIPv4'] = network_config['net']['ipv4']
 
 # get node-count from config
-count_nodes = network_config_scale['max-nodes']
+count_nodes = network_config_scale['max_nodes']
 
 # start containers
 for i in range(0, count_nodes):
