@@ -15,12 +15,22 @@ To demonstrate encapsulated management control channel communications (used as a
 
 ## 1. Prerequisites
 
-- Docker
-- Setting Docker permissions correctly
+- **Docker**: Required for running PostgreSQL nodes in containers
+- **Docker Permissions**: Ensure your user has proper Docker permissions (add user to `docker` group or run with appropriate privileges)
+- **Python 3.x**: Python 3.6 or higher
+- **Network Configuration**: The setup creates a Docker network `172.16.1.0/24` - ensure this subnet doesn't conflict with existing networks
 
-The following PyPi modules will be installed ...
+The following Python packages are required on the **host** machine:
 
-- Python Micro ESB ()
+- **pgdbpool**: The database connection pool library (this repository's package)
+- **jsocket**: JSON socket communication library (included in `packages/` directory)
+- **ipcalc**: IP address calculation utilities for network configuration
+
+The following PyPi modules will be installed **inside each Docker container**:
+
+- **python3-psycopg2**: PostgreSQL adapter for Python (installed via apt)
+- **microesb**: Python Micro ESB framework for service orchestration and message routing
+- **jsocket**: JSON-RPC socket communication protocol (version 1.9.5)
 
 ## 2. Architecture
 
