@@ -29,7 +29,7 @@ $$BEGIN
   RETURN NEW;
 END;$$;
 
-CREATE TRIGGER "00_upd_ts_triger_{table_name}"
+CREATE TRIGGER "00_upd_ts_trigger_{table_name}"
   BEFORE UPDATE ON {table_name}
 FOR EACH ROW EXECUTE PROCEDURE upd_ts_trigger_{table_name}();
 
