@@ -103,4 +103,4 @@ python3 test-update.py
 python3 test-select.py
 ```
 
-Monitor cluster behavior by observing replication lag, connection distribution across pool groups, and data consistency across nodes. PostgreSQL logs within each container provide detailed information regarding logical replication worker activity and subscription synchronization status.
+On each node check data consistency (all rows must be equal) by using `SELECT * FROM table1` with `psql -U postgres -d lb-test`.
