@@ -1,5 +1,5 @@
 FROM postgres:18-bookworm
-MAINTAINER Claus Prüfer
+LABEL MAINTAINER Claus Prüfer
 
 RUN apt-get -qq update -y
 RUN apt-get -qq install iproute2 iputils-ping net-tools python3-pip python3-psycopg2 -y
