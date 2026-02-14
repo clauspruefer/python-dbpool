@@ -56,7 +56,7 @@ The orchestration subsystem (`orchestrator.py`) executes on the host system and 
 
 Communication between the orchestrator and containerized nodes leverages the `jsocket` library, implementing a synchronous request-response protocol over TCP sockets. Each container exposes a JSON-RPC service endpoint (port 64000) that accepts administrative commands for database initialization, replication configuration, and topology management.
 
-The orchestration workflow enforces sequential node integration: nodes are added to the replication topology individually in ascending index order. This sequential bootstrapping constraint, while not strictly necessary for correctness, facilitates deterministic debugging and provides a foundation for dynamic node scaling operations (scale-up/scale-down) in production environments. The orchestrator maintains a persistent connection pool to all active nodes, enabling efficient command dispatch throughout the cluster's operational lifetime.
+The orchestrator's add node mechanism is **designed** to add **one** node **after each other** to the replication topology, making it possible to dynamically scale up or down by adding single nodes sequentially. This design enables gradual cluster expansion and contraction in production environments without requiring batch operations. The orchestrator maintains a persistent connection pool to all active nodes, enabling efficient command dispatch throughout the cluster's operational lifetime.
 
 ### 2.3. Test Setup
 
