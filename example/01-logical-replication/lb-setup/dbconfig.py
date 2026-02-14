@@ -16,6 +16,14 @@ config = {
         'writer2': {
             'connection_count': 10,
             'autocommit': True
+        },
+        'reader1': {
+            'connection_count': 24,
+            'autocommit': True
+        },
+        'reader2': {
+            'connection_count': 48,
+            'autocommit': True
         }
     }
 }
