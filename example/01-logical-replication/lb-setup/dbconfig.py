@@ -36,7 +36,7 @@ netconfig_bits = netconfig['netbits']
 net_segment = '{}/{}'.format(netconfig_net, netconfig_bits)
 net_ipv4_addr = iter(ipcalc.Network(net_segment))
 
-max_nodes = sysconfig['system']['networks'][0]['config']['scale']['max-nodes']
+max_nodes = sysconfig['system']['networks'][0]['config']['scale']['max_nodes']
 
 for i in range(0, max_nodes):
     config['db'].append(
