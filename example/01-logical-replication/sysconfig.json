@@ -47,7 +47,7 @@
                     },
                     "scale": {
                         "min-nodes": 2,
-                        "max-nodes": 6,
+                        "max-nodes": 8,
                         "metrics": {
                             "characteristics": "default"
                         }
