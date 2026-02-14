@@ -16,19 +16,19 @@ with pool.Handler('writer2') as db1:
 
 
 def updater1():
-    for i in range (0, 20):
+    for i in range(0, 20):
         with pool.Handler('writer1') as db1:
             db1.query("UPDATE table1 SET col1='update1-new-t1-{}' WHERE id = 1235433221".format(i))
             time.sleep(0.1)
 
 def updater2():
-    for i in range (0, 40):
+    for i in range(0, 40):
         with pool.Handler('writer2') as db1:
             db1.query("UPDATE table1 SET col1='update1-new-t2-{}' WHERE id = 1235433221".format(i))
             time.sleep(0.2)
 
 def updater3():
-    for i in range (0, 15):
+    for i in range(0, 15):
         with pool.Handler('writer1') as db1:
             db1.query("UPDATE table1 SET col1='update1-new-t3-{}' WHERE id = 1235433221".format(i))
             time.sleep(0.8)
