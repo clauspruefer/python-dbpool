@@ -1,10 +1,10 @@
 # PostgreSQL Logical Replication Load-Balancing Example
 
-This example demonstrates how the `python-dbpool` module works with multiple write and read configurations in a PostgreSQL logical replication environment.
+Demonstrates how the `python-dbpool` module works with multiple write and read configurations in a PostgreSQL logical replication environment.
 
-Additionally, this example introduces a minimal Docker orchestration mechanism that configures a running logical-replicated PostgreSQL environment consisting of a test table replicated across multiple PostgreSQL Docker nodes.
+Additionally, introduces a minimal Docker orchestration mechanism that configures a running logical-replicated PostgreSQL environment consisting of a test table replicated across multiple PostgreSQL Docker nodes.
 
-The setup configures a static set of PostgreSQL nodes which are then used to run all load-balancing tests. With slight modifications, the setup can be extended to support dynamically adding and removing nodes at runtime (scale up/down).
+A static set of PostgreSQL nodes is configured and used to run all load-balancing tests. With slight modifications, it can be extended to support dynamically adding and removing nodes at runtime (scale up/down).
 
 To demonstrate encapsulated management control channel communications (used as a prototype in our SDMI - Simple Docker Management Instrumentation project), communication between the host orchestrator and Docker containers has been implemented using a JSON-RPC socket communication protocol instead of direct PostgreSQL connections.
 
@@ -13,7 +13,7 @@ To demonstrate encapsulated management control channel communications (used as a
 - **Docker**: Required for running PostgreSQL nodes in containers
 - **Docker Permissions**: Ensure your user has proper Docker permissions (add user to `docker` group or run with appropriate privileges)
 - **Python 3.x**: Python 3.6 or higher
-- **Network Configuration**: The setup creates a Docker network `172.16.1.0/24` - ensure this subnet doesn't conflict with existing networks
+- **Network Configuration**: A Docker network `172.16.1.0/24` is created - ensure this subnet doesn't conflict with existing networks
 
 The following Python packages are required on the **host** machine:
 
@@ -29,7 +29,7 @@ The following PyPi modules will be installed **inside each Docker container**:
 
 ## 2. Architecture
 
-This demonstration instantiates a multi-node PostgreSQL cluster employing bidirectional logical replication, wherein each node functions simultaneously as both a publisher and subscriber. Such a configuration establishes a multi-master topology, permitting writes to be distributed across nodes while maintaining automatic, eventual data consistency through PostgreSQL's logical replication mechanism.
+A multi-node PostgreSQL cluster is instantiated employing bidirectional logical replication, wherein each node functions simultaneously as both a publisher and subscriber. Such a configuration establishes a multi-master topology, permitting writes to be distributed across nodes while maintaining automatic, eventual data consistency through PostgreSQL's logical replication mechanism.
 
 Standard PostgreSQL logical replication using native write-ahead log (WAL) streaming exhibits inherent limitations in multi-master scenarios, particularly concerning primary key conflicts and update sequencing. To guarantee deterministic data synchronization across INSERT, UPDATE, and DELETE operations, this implementation incorporates two architectural enhancements:
 
