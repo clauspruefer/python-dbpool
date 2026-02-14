@@ -98,7 +98,7 @@ for node in svc_net_topology['TopologyHost']:
     print(res)
 
     # subscribe others to node
-    for i in range (node['index'], 0, -1):
+    for i in range(node['index'], 0, -1):
 
         node_item = svc_net_topology['TopologyHost'][i-1]
         print('Index:{} NodeItem:{}'.format(i-1, node_item))
