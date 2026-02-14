@@ -1,11 +1,6 @@
 # PostgreSQL Logical Replication Load-Balancing Example
 
-This example demonstrates how the `python-dbpool` module works with multiple write and read configurations in a PostgreSQL logical replication environment. It showcases:
-
-- **Load Balancing**: Distributing database operations across multiple PostgreSQL nodes
-- **Write Balancing**: Multiple writer groups (`writer1`, `writer2`) distributing INSERT/UPDATE operations
-- **Read Balancing**: Multiple reader groups (`reader1`, `reader2`) distributing SELECT operations
-- **Multi-Master Replication**: PostgreSQL logical replication with bidirectional data synchronization
+This example demonstrates how the `python-dbpool` module works with multiple write and read configurations in a PostgreSQL logical replication environment.
 
 Additionally, this example introduces a minimal Docker orchestration mechanism that configures a running logical-replicated PostgreSQL environment consisting of a test table replicated across multiple PostgreSQL Docker nodes.
 
