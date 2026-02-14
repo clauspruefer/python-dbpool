@@ -65,7 +65,7 @@ class Database(microesb.ClassHandler):
         self.host = '127.0.0.1'
         self.user = 'postgres'
         self.autocommit = True
-        self._seq_mplicator = 2147483647
+        self._seq_multiplier = 2147483647
 
         with open('/tmp/net-config.json', 'r') as fh:
             self.netconf = json.loads(fh.read())
@@ -96,7 +96,7 @@ class Database(microesb.ClassHandler):
         ct_sql = sql_queries.create_table.format(
             table_name=self.Table.name,
             table_columns=self.Table.get_table_sql(),
-            table_seq_start=(node_index*self._seq_mplicator)+1
+            table_seq_start=(node_index*self._seq_multiplier)+1
         )
 
         logger.debug('create_replica_table sql:{}'.format(ct_sql))
