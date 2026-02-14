@@ -75,7 +75,7 @@ Following successful cluster orchestration, the test harness can be executed to 
 
 The object-oriented design within each containerized node employs the `python-microesb` framework, which provides structured abstractions for message routing, command dispatch, and service orchestration. This microservice-oriented architecture encapsulates database management operations (e.g., replication subscription establishment, publication configuration, schema manipulation) as discrete service handlers, promoting separation of concerns and testability.
 
-In contrast, the orchestrator implementation (`orchestrator.py`) exhibits a more procedural structure, prioritizing rapid prototyping over architectural refinement. This disparity in code quality reflects deliberate engineering tradeoffs: the containerized service layer is designed for production deployment and extensibility, whereas the orchestrator serves primarily as a bootstrapping utility and will undergo future refactoring to align with the microesb abstraction patterns utilized in the SDMI project.
+In contrast, the `orchestrator.py` code quality is currently low (due to deadlines) but sufficient for this example. It will be updated to high-level OOP in the SDMI project.
 
 ## 4. How to Run Tests
 
