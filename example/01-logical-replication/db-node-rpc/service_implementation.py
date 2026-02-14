@@ -217,7 +217,7 @@ class Column(microesb.MultiClassHandler):
 
     def _gen_column_sql(self):
         yield '{} {}'.format(self.name, self.type)
-        if self.default is True:
+        if self.default is not False:
             yield ' DEFAULT {}'.format(self.default)
         if self.primary_key is True:
             yield ' PRIMARY KEY'
