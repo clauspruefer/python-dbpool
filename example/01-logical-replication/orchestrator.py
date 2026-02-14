@@ -19,7 +19,7 @@ def mm_close(client_ref):
     client_ref.close()
 
 
-# load configuration
+# load system configuration
 with open('./sysconfig.json', 'r') as fh:
     sysconfig = json.loads(fh.read())
 
