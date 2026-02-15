@@ -1,0 +1,65 @@
+{
+    "system": {
+        "config": {
+            "network": {
+                "failover_mode": false,
+                "run_on_host": true,
+                "managers": [ "172.16.1.254" ]
+            },
+            "roles": {
+                "SYSOwner": {
+                    "id": "admin",
+                    "password": "admin"
+                },
+                "SYSPgDBReplication": {
+                    "id": "replicator",
+                    "password": "replicator"
+                }
+            }
+        },
+        "networks": [
+            {
+                "id": "dbpool-net",
+                "config": {
+                    "net": {
+                        "ipv4": {
+                            "subnet": "172.16.1.0",
+                            "netmask": "255.255.255.0",
+                            "netbits": 24,
+                            "gateway": "172.16.1.254",
+                            "hostaddress": "172.16.1.254"
+                        },
+                        "domain": ".localnet",
+                        "domain_prepend_netid": true,
+                        "parts": [
+                            {
+                                "id": "dbpool-net-1",
+                                "ipv4": {
+                                    "start": 1,
+                                    "end": 253
+                                }
+                            }
+                        ],
+                        "parent": null
+                    },
+                    "permissions": {
+                        "SYSOwner": "admin"
+                    },
+                    "scale": {
+                        "min_nodes": 2,
+                        "max_nodes": 8,
+                        "metrics": {
+                            "characteristics": "default"
+                        }
+                    }
+                }
+            }
+        ],
+        "runtime": {
+            "network": {
+                "nodes": [
+                ]
+            }
+        }
+    }
+}
