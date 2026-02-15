@@ -37,6 +37,8 @@ Standard PostgreSQL logical replication using native write-ahead log (WAL) strea
 
 2. **Temporal Conflict Resolution**: An update timestamp column (`upd_ts`) with a corresponding trigger function ensures temporal ordering of updates. The trigger conditionally applies updates only when the incoming modification timestamp exceeds the existing column value, effectively preventing stale updates from overwriting more recent data in scenarios involving replication lag or out-of-order delivery.
 
+!PostgreSQL Logical Replication Overview](/diagram/Python-DBPool-LogicalReplication-Overview.png)
+
 ### 2.1. PostgreSQL Cluster
 
 The PostgreSQL cluster is instantiated as a collection of containerized database instances, each executing within an isolated Docker environment. The cluster's cardinality—defined by the parameter `['system']['networks'][0]['config']['scale']['max_nodes']` in `sysconfig.json`—determines the number of peer nodes participating in the logical replication topology.
@@ -53,6 +55,8 @@ Communication between the orchestrator and containerized nodes leverages the `js
 
 The orchestrator's add node mechanism is designed to add **one** node **after each other** to the replication topology, making it possible to dynamically scale up or down by adding single nodes sequentially. This design enables gradual cluster expansion and contraction in production environments without requiring batch operations. The orchestrator maintains a persistent connection pool to all active nodes, enabling efficient command dispatch throughout the cluster's operational lifetime.
 
+!PostgreSQL Logical Replication Orchestration](/diagram/Python-DBPool-LogicalReplication-Orchestration.png)
+
 ### 2.3. Test Setup
 
 Following successful cluster orchestration, the test harness can be executed to validate load-balancing and replication behavior. The test suite comprises three sequential components, each exercising distinct database operation patterns:
@@ -65,6 +69,8 @@ Following successful cluster orchestration, the test harness can be executed to 
 
 > [!WARNING]
 > To restart the tests, DELETE all rows from table1 or restart the orchestrator (after stopping all containers)
+
+!PostgreSQL Logical Replication Loadbalancing Test Setup](/diagram/Python-DBPool-LogicalReplication-LBTestSetup.png)
 
 ## 3. OOP Model
 
