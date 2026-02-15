@@ -67,10 +67,10 @@ Following successful cluster orchestration, the test harness can be executed to 
 
 3. **Select Test** (`test-select.py`): Executes concurrent read operations using two reader groups (`reader1` and `reader2`) with varying query patterns and frequencies. This test confirms that pgdbpool distributes read load across available replica nodes and that replicated data remains consistent across all cluster members.
 
+![PostgreSQL Logical Replication Loadbalancing Test Setup](./diagram/Python-DBPool-LogicalReplication-LBTestSetup.png)
+
 > [!WARNING]
 > To restart the tests, DELETE all rows from table1 or restart the orchestrator (after stopping all containers)
-
-![PostgreSQL Logical Replication Loadbalancing Test Setup](./diagram/Python-DBPool-LogicalReplication-LBTestSetup.png)
 
 ## 3. OOP Model
 
