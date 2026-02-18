@@ -70,6 +70,6 @@ To run all tests (unit and integration) after pip package installation
 
 - **GitHub Main**: `https://github.com/clauspruefer/python-dbpool <https://github.com/clauspruefer/python-dbpool>`_
 - **GitHub PostgreSQL Extension**: `https://github.com/WEBcodeX1/pg_extensions/tree/main/prep_queries <https://github.com/WEBcodeX1/pg_extensions/tree/main/prep_queries>`_
-- **Sphinx Doc**: `https://pythondocs.webcodex.de/pgdbpool/v1.0 <https://pythondocs.webcodex.de/pgdbpool/v1.0>`_
+- **Sphinx Doc**: `https://pythondocs.webcodex.de/pgdbpool/v1.0 <https://pythondocs.webcodex.de/pgdbpool/v1.0.1>`_
 - **WEB/codeX**: `https://webcodex.de <https://webcodex.de>`_
 - **Der IT Prüfer**: `https://webcodex.de/it-pruefer <https://webcodex.de/it-pruefer>`_
