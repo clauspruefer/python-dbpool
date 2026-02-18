@@ -9,8 +9,8 @@
 project = 'Python pgdbpool'
 copyright = '2018 - 2025, Claus Prüfer'
 author = 'Claus Prüfer'
-version = '1.0'
-release = '1.0'
+version = '1.0.1'
+release = '1.0.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
