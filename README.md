@@ -5,7 +5,7 @@
 
 ## 1. Primary Scope
 
-The **pgdbpool** Python module is a tiny **PostgreSQL Database Connection De-Multiplexer**, primarily designed for *Web- / Application Servers*.
+The **pgdbpool** Python module is a tiny **PostgreSQL Database Connection De-Multiplexer**.
 
 **Key Features:**
 - **Multi-endpoint support**: Load balance across multiple PostgreSQL servers
@@ -17,12 +17,12 @@ The **pgdbpool** Python module is a tiny **PostgreSQL Database Connection De-Mul
 
 ```text
 +----------------------+                         +---------------------
-| WebServer Service.py | -- Handler Con #1 ----> | PostgreSQL
+| Server Service.py    | -- Handler Con #1 ----> | PostgreSQL
 | Request / Thread #1  |                         | Backend #1
 +----------------------+                         |
                                                  |
 +----------------------+                         |
-| WebServer Service.py | -- Handler Con #2 ----> | PostgreSQL
+| Server Service.py    | -- Handler Con #2 ----> | PostgreSQL
 | Request / Thread #2  |                         | Backend #2
 +----------------------+                         +---------------------
 ```

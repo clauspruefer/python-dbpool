@@ -48,9 +48,9 @@ The database connection configuration supports both single and multiple database
             'user': 'username',
             'pass': 'userpass',
             'ssl': False,
-            'connect_timeout': 30,
+            'connect_timeout': 10,
             'connection_retry_sleep': 1,
-            'query_timeout': 120,
+            'query_timeout': 5000,
             'session_tmp_buffer': 128
         }
     }
@@ -65,23 +65,13 @@ The database connection configuration supports both single and multiple database
                 'host': 'db1.example.com',
                 'name': 'dbname',
                 'user': 'username',
-                'pass': 'userpass',
-                'ssl': False,
-                'connect_timeout': 30,
-                'connection_retry_sleep': 1,
-                'query_timeout': 120,
-                'session_tmp_buffer': 128
+                'pass': 'userpass'
             },
             {
                 'host': 'db2.example.com',
                 'name': 'dbname',
                 'user': 'username',
-                'pass': 'userpass',
-                'ssl': False,
-                'connect_timeout': 30,
-                'connection_retry_sleep': 1,
-                'query_timeout': 120,
-                'session_tmp_buffer': 128
+                'pass': 'userpass'
             }
         ]
     }
@@ -143,33 +133,27 @@ The threading model can be configured to optimize for different deployment scena
      - 
      - Database Auth Password
    * - ssl
-     - bool
+     - enum (disable|allow|prefer|require)
      - 
-     - x
-     - False
-     - Use SSL / TLS
+     -
+     - disable
+     - SSL / TLS properties
    * - connect_timeout
      - int
      - Seconds
-     - x
-     - 30
+     -
+     - 10
      - Connect Timeout
-   * - connection_retry_sleep
-     - int
-     - Seconds
-     - x
-     - 1
-     - Sleep Between Connect Retry
    * - query_timeout
      - int
-     - Seconds
-     - x
-     - 120
+     - Milliseconds
+     -
+     - 5000
      - Query Timeout
    * - session_tmp_buffer
      - int
-     - Kilobytes
-     - x
+     - Megabytes
+     -
      - 128
      - Session Buffer Memory
 
@@ -230,9 +214,9 @@ The following schema represents the internal Python structures. Some values (e.g
             'user': 'dbuser',
             'pass': 'dbpass',
             'ssl': False,
-            'connect_timeout': 30,
+            'connect_timeout': 10,
             'connection_retry_sleep': 1,
-            'query_timeout': 120,
+            'query_timeout': 5000,
             'session_tmp_buffer': 128
         },
         'groups': {
@@ -288,18 +272,12 @@ Configure multiple database endpoints for automatic load balancing and failover:
                 'name': 'myapp',
                 'user': 'appuser',
                 'pass': 'securepassword',
-                'ssl': 'require',
-                'connect_timeout': 30,
-                'query_timeout': 120
             },
             {
                 'host': 'secondary-db.example.com',
                 'name': 'myapp',
                 'user': 'appuser', 
                 'pass': 'securepassword',
-                'ssl': 'require',
-                'connect_timeout': 30,
-                'query_timeout': 120
             }
         ],
         'groups': {

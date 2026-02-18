@@ -103,6 +103,12 @@ class Connection(object):
         cls._dbiter_ref = cls._dbiter()
 
         db_config = cls._config['db'][0]
+
+        if 'query_timeout' not in db_config:
+            db_config['query_timeout'] = 5000
+        if 'session_tmp_buffer' not in db_config:
+            db_config['session_tmp_buffer'] = 128
+
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
 
@@ -216,10 +222,12 @@ class Connection(object):
         (group, group_id) = connection
         cls.logger.debug('connection get_connection_count() group_id:{}'.format(group_id))
         connections = cls._config['groups'][group]['connections']
+
         for (conn_ref, status) in connections:
             cls.logger.debug('connection get_connection_count() conn_ref:{} status:{}'.format(conn_ref, status))
             if status == 'occupied':
                 connection_count += 1
+
         return connection_count
 
     @classmethod
@@ -236,6 +244,7 @@ class Connection(object):
         connection_by_id = connections[group_id]
         new_connection = (connection_by_id[0], status)
         connections[group_id] = new_connection
+
         cls.logger.debug('connection set_connection_status() group_id:{} status:{} con_ref:{}'.format(
                 group_id,
                 status,
@@ -270,6 +279,11 @@ class Connection(object):
             group_container = cls._config['groups'][conn_group]
 
             cls.logger.debug('connection connect() db_config:{}'.format(db_container))
+
+            if 'ssl' not in db_container:
+                db_container['ssl'] = 'disable'
+            if 'connect_timeout' not in db_container:
+                db_container['connect_timeout'] = 10
 
             group_container['connections'][conn_id] = (
                 psycopg2.connect(
@@ -316,7 +330,7 @@ class Connection(object):
                     return
                 except DBConnectionError as e:
                     cls.logger.debug('connection reconnect() exception:{}'.format(repr(e)))
-                    time.sleep(cls._config['db']['connection_retry_sleep'])
+                    time.sleep(1)
 
 
 class Query(object):
