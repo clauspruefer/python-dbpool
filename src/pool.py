@@ -103,6 +103,12 @@ class Connection(object):
         cls._dbiter_ref = cls._dbiter()
 
         db_config = cls._config['db'][0]
+
+        if 'query_timeout' not in db_config:
+            db_config['query_timeout'] = 5000
+        if 'session_tmp_buffer' not in db_config:
+            db_config['session_tmp_buffer'] = 128
+
         statement_timeout = 'statement_timeout={}'.format(db_config['query_timeout'])
         temp_buffers = 'temp_buffers={}MB'.format(db_config['session_tmp_buffer'])
 
@@ -270,6 +276,11 @@ class Connection(object):
             group_container = cls._config['groups'][conn_group]
 
             cls.logger.debug('connection connect() db_config:{}'.format(db_container))
+
+            if 'ssl' not in db_container:
+                db_container['ssl'] = 'disable'
+            if 'connect_timeout' not in db_container:
+                db_container['connect_timeout'] = 10
 
             group_container['connections'][conn_id] = (
                 psycopg2.connect(
