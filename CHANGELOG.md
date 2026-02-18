@@ -1,5 +1,24 @@
 # Changelog
 
+## Version 1.0.1
+
+### Bug Fixes
+
+- **Default Configuration Values**: Added default values for optional database configuration parameters
+  - `query_timeout`: Default 5000 milliseconds (5 seconds)
+  - `session_tmp_buffer`: Default 128 MB
+  - `ssl`: Default 'disable'
+  - `connect_timeout`: Default 10 seconds
+  - Fixes issue where example `01-logical-replication` would not work without explicit configuration
+
+### Documentation
+
+- **Configuration Documentation**: Updated configuration documentation to reflect correct units and types
+  - Corrected `query_timeout` unit from Seconds to Milliseconds
+  - Corrected `ssl` type from boolean to enum (disable|allow|prefer|require)
+  - Updated default values to match implementation
+  - Simplified multi-database configuration examples to show only required parameters
+
 ## Version 1.0 (Stable)
 
 - Stable release tested and verified
