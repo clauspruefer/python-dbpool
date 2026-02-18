@@ -11,6 +11,12 @@
   - `connect_timeout`: Default 10 seconds
   - Fixes issue where example `01-logical-replication` would not work without explicit configuration
 
+### Changes
+
+- **Connection Retry**: Removed configurable connect retry sleep time
+  - Connection retry sleep time is now statically set to 1 second
+  - Simplifies configuration by removing `connection_retry_sleep` parameter
+
 ### Documentation
 
 - **Configuration Documentation**: Updated configuration documentation to reflect correct units and types
@@ -18,6 +24,13 @@
   - Corrected `ssl` type from boolean to enum (disable|allow|prefer|require)
   - Updated default values to match implementation
   - Simplified multi-database configuration examples to show only required parameters
+
+### CI/CD
+
+- **GitHub Actions**: Added GitHub Actions CI workflow
+  - Runs tests on push and pull request events
+  - Includes pytest with coverage reporting
+  - Validates module build and installation
 
 ## Version 1.0 (Stable)
 
