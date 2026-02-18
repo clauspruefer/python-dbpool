@@ -222,10 +222,12 @@ class Connection(object):
         (group, group_id) = connection
         cls.logger.debug('connection get_connection_count() group_id:{}'.format(group_id))
         connections = cls._config['groups'][group]['connections']
+
         for (conn_ref, status) in connections:
             cls.logger.debug('connection get_connection_count() conn_ref:{} status:{}'.format(conn_ref, status))
             if status == 'occupied':
                 connection_count += 1
+
         return connection_count
 
     @classmethod
@@ -242,6 +244,7 @@ class Connection(object):
         connection_by_id = connections[group_id]
         new_connection = (connection_by_id[0], status)
         connections[group_id] = new_connection
+
         cls.logger.debug('connection set_connection_status() group_id:{} status:{} con_ref:{}'.format(
                 group_id,
                 status,
@@ -327,7 +330,7 @@ class Connection(object):
                     return
                 except DBConnectionError as e:
                     cls.logger.debug('connection reconnect() exception:{}'.format(repr(e)))
-                    time.sleep(cls._config['db']['connection_retry_sleep'])
+                    time.sleep(1)
 
 
 class Query(object):
