@@ -133,33 +133,27 @@ The threading model can be configured to optimize for different deployment scena
      - 
      - Database Auth Password
    * - ssl
-     - bool
+     - enum (disable|allow|prefer|require)
      - 
-     - x
-     - False
-     - Use SSL / TLS
+     -
+     - disable
+     - SSL / TLS properties
    * - connect_timeout
      - int
      - Seconds
-     - x
+     -
      - 10
      - Connect Timeout
-   * - connection_retry_sleep
-     - int
-     - Seconds
-     - x
-     - 1
-     - Sleep Between Connect Retry
    * - query_timeout
      - int
      - Milliseconds
-     - x
+     -
      - 5000
      - Query Timeout
    * - session_tmp_buffer
      - int
      - Megabytes
-     - x
+     -
      - 128
      - Session Buffer Memory
 
