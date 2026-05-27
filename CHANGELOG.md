@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 1.0.2
+
+### Dependencies
+
+- **psycopg2-binary**: Replaced `psycopg2` (built from source) with `psycopg2-binary`
+  - Eliminates the need for PostgreSQL development headers and a C compiler at install time
+  - Simplifies installation across platforms with a pre-compiled binary wheel
+
 ## Version 1.0.1
 
 ### Bug Fixes
